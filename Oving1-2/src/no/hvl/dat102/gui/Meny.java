@@ -52,7 +52,8 @@ public class Meny {
 	public void start() {
 
 		// Main vindu
-		mainVindu.setSize(1350, 800); // setter opp main vindu
+		mainVindu.setSize(1325, 800); // setter opp main vindu
+		
 		// scroll funksjon i textArea
 		JScrollPane scrollPane = new JScrollPane(mainVinduTA, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
