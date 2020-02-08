@@ -4,23 +4,23 @@ import no.hvl.dat102.Film;
 import no.hvl.dat102.Sjanger;
 
 public class Filmarkiv2 implements FilmarkivADT {
-	
+
 	public class LinearNode<T> {
-		
+
 		private LinearNode<T> neste;
 		private T element;
-		
-		public LinearNode(T element){
+
+		public LinearNode(T element) {
 			this.element = element;
 			neste = null;
-			
+
 		}
-		
+
 		public LinearNode() {
-			
-			neste= null;
+
+			neste = null;
 		}
-		
+
 		public LinearNode<T> getNeste() {
 			return neste;
 		}
@@ -33,137 +33,123 @@ public class Filmarkiv2 implements FilmarkivADT {
 			this.neste = neste;
 		}
 
-		
 	}
-	
-	
-	
+
 	private LinearNode<Film> start; // start
 	private int antall;
-	
-	public Filmarkiv2 (int antall) {
-		
+
+	public Filmarkiv2(int antall) {
+
 		this.antall = 0;
 		start = null;
-		
-		
-		
+
 	}
-	
-
-
-
-
 
 	@Override
 	public void leggTilFilm(Film nyFilm) {
-		
-		if(start== null) {
-			
+
+		if (start == null) {
+
 			start = new LinearNode<Film>(nyFilm);
 			antall++;
 			return;
 		}
-		
-		LinearNode<Film> current = start; 
+
+		LinearNode<Film> current = start;
 		LinearNode<Film> newFilm = new LinearNode<Film>(nyFilm);
-		
-		
-		
-		 while(current.getNeste() != null)
-		 {
-			 
+
+		while (current.getNeste() != null) {
+
 			current = current.getNeste();
-			 
-		 }
-			 current.setNeste(newFilm);
-		//add legg 
+
+		}
+		current.setNeste(newFilm);
+		// add legg
 //		LinearNode <Film> ny = new LinearNode<Film>(nyFilm);
 //		
 //		LinearNode<Film> temp = start;
 //		start = ny;
 //		start.setNeste(temp);
-		antall ++;
-		
+		antall++;
+
 	}
-
-
-
 
 	@Override
 	public boolean slettFilm(int filmNr) {
-		
+
 		LinearNode<Film> temp = start;
 		LinearNode<Film> prev = null;
-		
-		
-		
-		if(temp != null && temp.getElement().getFilmID() == filmNr) {
-			
+
+		if (temp != null && temp.getElement().getFilmID() == filmNr) {
+
 			start = temp.getNeste();
 			antall--;
 			return true;
-			
+
 		}
-		
-		
-		while ( temp != null && temp.getElement().getFilmID() != filmNr) {
-			
+
+		while (temp != null && temp.getElement().getFilmID() != filmNr) {
+
 			prev = temp;
 			temp = temp.getNeste();
-			
-			
+
 		}
-		
-		if(temp == null) return false;
-		
-		
+
+		if (temp == null)
+			return false;
+
 		prev.setNeste(temp.getNeste());
 		antall--;
 		// prev.neste = temp.neste;
 		return true;
 	}
 
-
-
-
 	@Override
 	public Film[] sokTittel(String delstreng) {
-		
+
 		Film searchTab[] = new Film[antall];
 		LinearNode<Film> temp = start;
-		
+
 		int sokTall = 0;
-		
-		while(temp != null) {
-			
-			if(temp.getElement().getTittel().contains(delstreng)) {
-				
+
+		while (temp != null) {
+
+			if (temp.getElement().getTittel().contains(delstreng)) {
+
 				searchTab[sokTall] = temp.getElement();
 				sokTall++;
-				
+
 			}
-			
+
 			temp = temp.getNeste();
-			
-			
+
 		}
 		return searchTab;
-		
-		
+
 	}
-
-
-
 
 	@Override
 	public Film[] sokProdusent(String delstreng) {
-		// TODO Auto-generated method stub
-		return null;
+		Film searchTab[] = new Film[antall];
+		LinearNode<Film> temp = start;
+
+		int sokTall = 0;
+
+		while (temp != null) {
+
+			if (temp.getElement().getProdusent().contains(delstreng)) {
+
+				searchTab[sokTall] = temp.getElement();
+				sokTall++;
+
+			}
+
+			temp = temp.getNeste();
+
+		}
+		return searchTab;
+
 	}
-
-
-
 
 	@Override
 	public int antallSjanger(Sjanger sjanger) {
@@ -171,37 +157,31 @@ public class Filmarkiv2 implements FilmarkivADT {
 		return 0;
 	}
 
-
-
-
 	@Override
 	public int antall() {
-		
+
 		return antall;
 	}
 
-
-
-
 	@Override
 	public Film[] hentFilmTabell() {
-		
-		if(antall == 0) {
+
+		if (antall == 0) {
 			return new Film[0];
 		}
-		
+
 		LinearNode<Film> current = start;
-		
+
 		Film tab[] = new Film[antall];
-		for(int i = 0 ; i < antall; i++) {
-			
+		for (int i = 0; i < antall; i++) {
+
 			tab[i] = current.getElement();
 			current = current.getNeste();
-			
+
 		}
-		
+
 		// TODO Auto-generated method stub
 		return tab;
 	}
-	
+
 }

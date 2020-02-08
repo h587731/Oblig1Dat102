@@ -67,29 +67,23 @@ public class Filmarkiv implements FilmarkivADT {
 		}
 
 	}
-	
-	 private int pos = 0;
+
+	private int pos = 0;
 
 	@Override
 	public boolean slettFilm(int filmNr) {
 
 		boolean harSlettet = false;
 
-		// f�rst h�ndter special case om tabbel har 1 i st�rrelse
+		// først håndter special case om tabbel har 1 i størrelse
 		if (filmtabell.length == 0) {
 			return false;
-//			if (filmNr == filmtabell[0].getFilmID()) {
-//
-//				
-//				
-//				
-//			}
 		}
 
 		Film[] kopi = new Film[antall - 1];
 
 // finn filmID
-		
+
 		// set i = pos
 		for (int i = pos; i < filmtabell.length; i++) {
 			// lete etter filmNR
@@ -102,30 +96,19 @@ public class Filmarkiv implements FilmarkivADT {
 				// kopier over gammel tabell til nye tabell som er 1 mindre
 				for (int k = 0; k < filmtabell.length - 1; k++) {
 					kopi[k] = filmtabell[k];
-					
+
 				}
 
 				// oppdaterer antall og ny filmtabell og ser etter flere filmer � slette
 				antall--;
 				filmtabell = kopi;
 				slettFilm(filmNr);
-				pos=0;
+				pos = 0;
 				return true;
 
 			}
 
 		}
-//		
-//		for (Film obj : filmtabell) {
-//
-//			if (obj.getFilmID() == filmNr) {
-//
-//				obj = null;
-//
-//				harSlettet = true;
-//			}
-//
-//		}
 
 		return harSlettet;
 	}

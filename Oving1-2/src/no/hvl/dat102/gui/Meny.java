@@ -73,18 +73,16 @@ public class Meny {
 		// lager meny elementer, og deres under elementer og fester dem med metoder og
 		// action listener med metoden attachComponents
 		MenyComponent.attachComponents(fil, this, "Nytt", "Opprett", 1);
-		System.out.println("YOL sss");
+		MenyComponent.attachComponents(fil, this, "Åpne", "Åpne", 2);
+		MenyComponent.attachComponents(fil, this, "Lagre", "Lagre", 3);
+		MenyComponent.attachComponents(fil, this, "Lagre som", "Lagre som", 4);
+		MenyComponent.attachComponents(arkiv, this, "Legg til", "Legg til film", 5);
+		MenyComponent.attachComponents(arkiv, this, "Slett", "Slett filmerID", 6);
+		MenyComponent.attachComponents(arkiv, this, "Søk Tittel", "Søk", 7);
+		MenyComponent.attachComponents(arkiv, this, "Søk Produsent", "Søk", 9);
+		MenyComponent.attachComponents(arkiv, this, "Info", "", 10);
 
-//		MenyComponent.attachComponents(fil, this, "Åpne", "Åpne", 2);
-//		MenyComponent.attachComponents(fil, this, "Lagre", "Lagre", 3);
-//		MenyComponent.attachComponents(fil, this, "Lagre som", "Lagre som", 4);
-//		MenyComponent.attachComponents(arkiv, this, "Legg til", "Legg til film", 5);
-//		MenyComponent.attachComponents(arkiv, this, "Slett", "Slett filmerID", 6);
-//		MenyComponent.attachComponents(arkiv, this, "Søk Tittel", "Søk", 7);
-//		MenyComponent.attachComponents(arkiv, this, "Søk Produsent", "Søk", 9);
-//		MenyComponent.attachComponents(arkiv, this, "Info", "", 10);
-//
-//		MenyComponent.attachComponents(hjelp, this, "Hjelp2", "", 8);
+		MenyComponent.attachComponents(hjelp, this, "Hjelp2", "", 8);
 
 		// exit betingelser
 		mainVindu.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
