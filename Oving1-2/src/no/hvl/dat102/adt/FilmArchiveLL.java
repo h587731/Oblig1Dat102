@@ -168,7 +168,7 @@ public class FilmArchiveLL implements FilmArchiveADT {
 		LinearNode<Film> current = start;
 
 		Film tab[] = new Film[antall];
-		for (int i = 0; i < antall; i++) {
+		for (int i = antall - 1; i >= 0; i--) {
 
 			tab[i] = current.getElement();
 			current = current.getNeste();
