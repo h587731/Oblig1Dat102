@@ -1,25 +1,15 @@
 package no.hvl.dat102.gui;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.beans.Visibility;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -40,13 +30,11 @@ public class Meny {
 	private FilmarkivADT filma;
 	private String filNavn = null;
 
-
 	// Frame / mainvindu med panel og textArea( der hvor arkiv printes til)
-	private JFrame mainVindu = new JFrame("Verdens beste filmarkiv"); 	
+	private JFrame mainVindu = new JFrame("Verdens beste filmarkiv");
 	private JPanel mainPanel = new JPanel();
 	private JTextArea mainVinduTA = new JTextArea();
-	
-	
+
 	// MenyBar
 	private JMenuBar mb = new JMenuBar();
 
@@ -55,37 +43,34 @@ public class Meny {
 	private JMenu hjelp = new JMenu("Hjelp");
 	private JMenu arkiv = new JMenu("Arkiv");
 
-
-
 	public Meny(FilmarkivADT filma) {
 		tekstgr = new Tekstgrensesnitt();
 		this.filma = filma;
 
 	}
 
-	
-	
 	public void start() {
 
 		// Main vindu
-		mainVindu.setSize(1300, 800); // setter opp main vindu
+		mainVindu.setSize(1350, 800); // setter opp main vindu
 		// scroll funksjon i textArea
 		JScrollPane scrollPane = new JScrollPane(mainVinduTA, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		mainVindu.add(scrollPane); 
-		mainVindu.getContentPane().add(BorderLayout.SOUTH, mainPanel);	// fester mainPanel
-		mainVindu.getContentPane().add(BorderLayout.NORTH, mb);			// fester menyBar og vindu
+		mainVindu.add(scrollPane);
+		mainVindu.getContentPane().add(BorderLayout.SOUTH, mainPanel); // fester mainPanel
+		mainVindu.getContentPane().add(BorderLayout.NORTH, mb); // fester menyBar og vindu
 		mainVindu.getContentPane().add(BorderLayout.CENTER, scrollPane); // Legger main vindu textArea til via scollPane
 		mainVindu.setVisible(true);
-		mainVindu.setFont(font);   // Main vindu font
+		mainVindu.setFont(font); // Main vindu font
 
-		mainVinduTA.setFont(font);  // main vindu textArea font og uneditable
+		mainVinduTA.setFont(font); // main vindu textArea font og uneditable
 		mainVinduTA.setEditable(false);
 		mainVinduTA.append("Velkommen!");
 		mb.add(fil); // festet fil til menybar
-		mb.add(hjelp); 	
-		
-		// lager meny elementer, og deres under elementer og fester dem med metoder og action listener
+		mb.add(hjelp);
+
+		// lager meny elementer, og deres under elementer og fester dem med metoder og
+		// action listener
 		MenyComponent.attachComponents(fil, this, "Nytt", "Opprett", 1);
 		MenyComponent.attachComponents(fil, this, "Åpne", "Åpne", 2);
 		MenyComponent.attachComponents(fil, this, "Lagre", "Lagre", 3);
@@ -95,11 +80,9 @@ public class Meny {
 		MenyComponent.attachComponents(arkiv, this, "Søk Tittel", "Søk", 7);
 		MenyComponent.attachComponents(arkiv, this, "Søk Produsent", "Søk", 9);
 		MenyComponent.attachComponents(arkiv, this, "Info", "", 10);
-		
+
 		MenyComponent.attachComponents(hjelp, this, "Hjelp2", "", 8);
-		
-		
-		
+
 		// exit betingelser
 		mainVindu.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		mainVindu.addWindowListener(new WindowAdapter() {
@@ -116,16 +99,8 @@ public class Meny {
 			}
 		});
 
-		
-
 	}
-	
-	
 
-	
-	
-
- 
 	public void opprettArkiv(JTextField tfInput) {
 		String x = tfInput.getText(); // lese text fra textfield
 		// Skjekke om filnavn finnes
@@ -143,19 +118,19 @@ public class Meny {
 
 		}
 
-		filNavn = x;									// setter filnavn til userinput fra textfield
+		filNavn = x; // setter filnavn til userinput fra textfield
 		FilmarkivADT ny = KlientFilmarkiv.sendNytt(0); // oppretter nytt film arkiv med størresle 0.
-		Fil.skrivTilFil(ny, filNavn + ".txt");			// skriver til fil. får da en text fil med kunn et nulltall. Altsa "0"
-		filma = ny;										// sier at Filma referansen skal peke på det nye filmarkiv objectet
-		
+		Fil.skrivTilFil(ny, filNavn + ".txt"); // skriver til fil. får da en text fil med kunn et nulltall. Altsa "0"
+		filma = ny; // sier at Filma referansen skal peke på det nye filmarkiv objectet
+
 	}
-	
+
 	// metode som kalles nÅr Åpne knapp i openVindu trykkes
 	// leser input fra txtfield og Åpner doc
 	public void openFile(JTextField tfInput, Meny main) {
 
 		String x = tfInput.getText(); // lese text fra textfield
-		
+
 		File skjekk = new File(x + ".txt");
 		if (!skjekk.exists()) {
 			mainVinduTA.setText("");
@@ -165,7 +140,7 @@ public class Meny {
 		}
 
 		filNavn = x; // lagrer filnavn string for lagring seinere
-		
+
 //		FilmarkivADT sizeCheck = Fil.lesFraFil(x + ".txt" , 0, 0);
 //		System.out.println(sizeCheck.hentFilmTabell().length);
 //		
@@ -176,14 +151,10 @@ public class Meny {
 //			mainVinduTA.append(tekstgr.visFilmer(filma.hentFilmTabell(), 0, 100));
 //			SwingUtilities.updateComponentTreeUI(mainVinduTA);
 //		}
-		
+
 		filma = Fil.lesFraFil(x + ".txt"); // leser fra fil med filnavn x + ".txt"
-		
-		
+
 	}
-
-
-	
 
 	// Lagre
 
@@ -194,26 +165,24 @@ public class Meny {
 	}
 
 	public void lagreSomTilFil(JTextField tfInput) {
-		
+
 		String x = tfInput.getText(); // lese text fra textfield
 		File skjekk = new File(x + ".txt"); // lager File object med string input + .text. Feks arkiv55.txt
-		if (skjekk.exists()) {				// skjekker om det finnest i mappen fra før
+		if (skjekk.exists()) { // skjekker om det finnest i mappen fra før
 
-			mainVinduTA.setText("");		// om fil med likt filnavn eksisterer gjør clean up og stop prosess
+			mainVinduTA.setText(""); // om fil med likt filnavn eksisterer gjør clean up og stop prosess
 			mainVinduTA.append("Det finnes allerede en fil med samme navn. \nPrøv et annet navn");
 
 			return;
 		}
 
 		filNavn = x; // lagrer filnavn string for lagring seinere
-		FilmarkivADT temp =  filma;	// lager midlertidig peker til filma
-		
-		opprettArkiv(tfInput);		// oppretter tomt arkiv med nyttFilnavn
-		filma = temp;				// får filma til å peke på temp object ( orginale filmarkivet vi ønsket å lagre)
-									// filma blir satt til et tomt filmarkiv i opprettArkiv()
-		lagreTilFil();				//lagrer til nye fil
+		FilmarkivADT temp = filma; // lager midlertidig peker til filma
 
-	
+		opprettArkiv(tfInput); // oppretter tomt arkiv med nyttFilnavn
+		filma = temp; // får filma til å peke på temp object ( orginale filmarkivet vi ønsket å lagre)
+						// filma blir satt til et tomt filmarkiv i opprettArkiv()
+		lagreTilFil(); // lagrer til nye fil
 
 	}
 
@@ -224,67 +193,63 @@ public class Meny {
 	}
 
 	public void leggTilKlikk(MenyComponent textfields) {
-		
-		Film temp = new Film(Integer.parseInt(textfields.getId().getText()), textfields.getProdusent().getText(), textfields.getTittel().getText(),
-				Integer.parseInt(textfields.getAar().getText()), Sjanger.finnSjanger(textfields.getSjanger().getText()), textfields.getSelskap().getText());
-		
-		
+
+		Film temp = new Film(Integer.parseInt(textfields.getId().getText()), textfields.getProdusent().getText(),
+				textfields.getTittel().getText(), Integer.parseInt(textfields.getAar().getText()),
+				Sjanger.finnSjanger(textfields.getSjanger().getText()), textfields.getSelskap().getText());
+
 		// Skjekk alle innputs
 		filma.leggTilFilm(temp);
 
 	}
 
-
-
 	public void slettFilm(JTextField tfInput) {
 
 		filma.slettFilm(Integer.parseInt((tfInput.getText())));
-	
-	
+
 	}
-	
-	
+
 	public void sokTittel(JTextField tfInput) {
 		Film[] temp = filma.sokTittel(tfInput.getText());
-		
-		
-		String str = tekstgr.visFilmer(temp, 0 , temp.length);
-		
+
+		String str = tekstgr.visFilmer(temp, 0, temp.length);
+
 		mainVinduTA.setText("");
 		mainVinduTA.append(str);
 		// vise resultat av listen
-		// ta tabell fra Filmarkiv.sok og kjøre igjennom tekstgrensesnitt metode kalt visFilmer
-	
-	
+		// ta tabell fra Filmarkiv.sok og kjøre igjennom tekstgrensesnitt metode kalt
+		// visFilmer
+
 	}
-	
-	
+
 	public void sokProd(JTextField tfInput) {
 		Film[] temp = filma.sokProdusent(tfInput.getText());
-		
-		
-		String str = tekstgr.visFilmer(temp, 0 , temp.length);
-		
+
+		String str = tekstgr.visFilmer(temp, 0, temp.length);
+
 		mainVinduTA.setText("");
 		mainVinduTA.append(str);
 		// vise resultat av listen
-		// ta tabell fra Filmarkiv.sok og kjøre igjennom tekstgrensesnitt metode kalt visFilmer
-	
-	
+		// ta tabell fra Filmarkiv.sok og kjøre igjennom tekstgrensesnitt metode kalt
+		// visFilmer
+
 	}
-	
+
 	public void refresh() {
 		mainVinduTA.setText(""); // fjerne tekst fra TextArea i hoved vindu
-		
+
 		mainVinduTA.append(tekstgr.printFilmCategory());
-		
-		if(false) {
-			
-			mainVinduTA.append(tekstgr.visFilmer(filma.hentFilmTabell(), 0 , 40));
+
+		if (false) {
+
+			mainVinduTA.append(tekstgr.visFilmer(filma.hentFilmTabell(), 0, 40));
 			SwingUtilities.updateComponentTreeUI(mainVindu);
-			mainVinduTA.append(tekstgr.visFilmer(filma.hentFilmTabell(), 40 , filma.hentFilmTabell().length));
+			mainVinduTA.append(tekstgr.visFilmer(filma.hentFilmTabell(), 40, filma.hentFilmTabell().length));
 		} else {
-		mainVinduTA.append(tekstgr.visFilmer(filma.hentFilmTabell(), 0, filma.hentFilmTabell().length));// skriver innhold i arkiv i textArea
+			mainVinduTA.append(tekstgr.visFilmer(filma.hentFilmTabell(), 0, filma.hentFilmTabell().length));// skriver
+																											// innhold i
+																											// arkiv i
+																											// textArea
 		}
 		mb.remove(hjelp); // fjerner Hjelp meny, legger til Arkiv meny, legger til Hjelp meny
 		mb.add(arkiv);
@@ -292,16 +257,14 @@ public class Meny {
 		mainVindu.setTitle("Arkiv: " + filNavn);
 		SwingUtilities.updateComponentTreeUI(mainVindu); // oppdaterer mainVindu slik at Arkiv meny vises
 	}
-	
-	
+
 	public void info() {
 		mainVinduTA.setText("");
 		mainVinduTA.append(tekstgr.skrivUtStatistikk(filma) + "\n\n\n\n");
-		mainVinduTA.append(tekstgr.visFilmer(filma.hentFilmTabell(), 0 , filma.hentFilmTabell().length));
-	
+		mainVinduTA.append(tekstgr.visFilmer(filma.hentFilmTabell(), 0, filma.hentFilmTabell().length));
+
 	}
-	
-	
+
 	public JTextArea getMainVinduTA() {
 		return mainVinduTA;
 	}
