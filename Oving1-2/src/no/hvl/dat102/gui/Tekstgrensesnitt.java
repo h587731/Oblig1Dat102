@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 import no.hvl.dat102.Film;
 import no.hvl.dat102.Sjanger;
-import no.hvl.dat102.adt.FilmarkivADT;
+import no.hvl.dat102.adt.FilmArchiveADT;
 
 public class Tekstgrensesnitt {
 	Scanner input = new Scanner(System.in);
@@ -77,15 +77,15 @@ public class Tekstgrensesnitt {
 
 	// Skrive ut alle Filmermed en spesiell delstreng i tittelen
 	// TODO
-	public void skrivUtFilmDelstrengITittel(FilmarkivADT filma, String delstreng) {
-		Film[] utTittel = filma.sokTittel(delstreng);
+	public void skrivUtFilmDelstrengITittel(FilmArchiveADT filma, String delstreng) {
+		Film[] utTittel = filma.siftTitle(delstreng);
 		visFilmer(utTittel, 0, utTittel.length);
 	}
 
 // TODO
 	// Skriver ut alle Filmerav en produsent/ en gruppe
-	public void skrivUtFilmProdusent(FilmarkivADT filma, String delstreng) {
-		Film[] utProd = filma.sokProdusent(delstreng);
+	public void skrivUtFilmProdusent(FilmArchiveADT filma, String delstreng) {
+		Film[] utProd = filma.siftProducer(delstreng);
 		visFilmer(utProd, 0, utProd.length);
 
 	}
@@ -95,8 +95,8 @@ public class Tekstgrensesnitt {
 	//
 	// Skrive ut en enkel statistikk som inneholder antall Filmertotalt
 	// og hvor mange det er i hver sjanger
-	public String skrivUtStatistikk(FilmarkivADT filma) {
-		String str = "Filmer  : " + filma.antall() + "\n";
+	public String skrivUtStatistikk(FilmArchiveADT filma) {
+		String str = "Filmer  : " + filma.size() + "\n";
 		str = str + "Action  : " + filma.antallSjanger(Sjanger.ACTION) + "\n";
 		str = str + "Drama   : " + filma.antallSjanger(Sjanger.DRAMA) + "\n";
 		str = str + "Historie: " + filma.antallSjanger(Sjanger.HISTORY) + "\n";

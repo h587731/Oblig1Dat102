@@ -1,0 +1,8 @@
+
+
+
+Test and rewrite textfield inputs to deal with Empty strings, capitalization, negative numbers, number zero etc.
+
+make FilmArchive able to deal with null.
+
+removeFilm() fix recursive making of new temp arrays. use Break; fix after 

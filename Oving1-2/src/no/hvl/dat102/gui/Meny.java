@@ -19,7 +19,7 @@ import javax.swing.SwingUtilities;
 import no.hvl.dat102.Fil;
 import no.hvl.dat102.Film;
 import no.hvl.dat102.Sjanger;
-import no.hvl.dat102.adt.FilmarkivADT;
+import no.hvl.dat102.adt.FilmArchiveADT;
 import no.hvl.dat102.klient.KlientFilmarkiv;
 
 public class Meny {
@@ -27,7 +27,7 @@ public class Meny {
 	private Font font = new Font("Courier New", Font.BOLD, 15);
 
 	private Tekstgrensesnitt tekstgr;
-	private FilmarkivADT filma;
+	private FilmArchiveADT filma;
 	private String filNavn = null;
 
 	// Frame / mainvindu med panel og textArea( der hvor arkiv printes til)
@@ -43,7 +43,7 @@ public class Meny {
 	private JMenu hjelp = new JMenu("Hjelp");
 	private JMenu arkiv = new JMenu("Arkiv");
 
-	public Meny(FilmarkivADT filma) {
+	public Meny(FilmArchiveADT filma) {
 		tekstgr = new Tekstgrensesnitt();
 		this.filma = filma;
 
@@ -120,7 +120,7 @@ public class Meny {
 		}
 
 		filNavn = x; // setter filnavn til userinput fra textfield
-		FilmarkivADT ny = KlientFilmarkiv.sendNytt(0); // oppretter nytt film arkiv med størresle 0.
+		FilmArchiveADT ny = KlientFilmarkiv.sendNewArchive(0); // oppretter nytt film arkiv med størresle 0.
 		Fil.skrivTilFil(ny, filNavn + ".txt"); // skriver til fil. får da en text fil med kunn et nulltall. Altsa "0"
 		filma = ny; // sier at Filma referansen skal peke på det nye filmarkiv objectet
 
@@ -178,7 +178,7 @@ public class Meny {
 		}
 
 		filNavn = x; // lagrer filnavn string for lagring seinere
-		FilmarkivADT temp = filma; // lager midlertidig peker til filma
+		FilmArchiveADT temp = filma; // lager midlertidig peker til filma
 
 		opprettArkiv(tfInput); // oppretter tomt arkiv med nyttFilnavn
 		filma = temp; // får filma til å peke på temp object ( orginale filmarkivet vi ønsket å lagre)
@@ -200,18 +200,18 @@ public class Meny {
 				Sjanger.finnSjanger(textfields.getSjanger().getText()), textfields.getSelskap().getText());
 
 		// Skjekk alle innputs
-		filma.leggTilFilm(temp);
+		filma.addMovie(temp);
 
 	}
 
 	public void slettFilm(JTextField tfInput) {
 
-		filma.slettFilm(Integer.parseInt((tfInput.getText())));
+		filma.removeFilm(Integer.parseInt((tfInput.getText())));
 
 	}
 
 	public void sokTittel(JTextField tfInput) {
-		Film[] temp = filma.sokTittel(tfInput.getText());
+		Film[] temp = filma.siftTitle(tfInput.getText());
 
 		String str = tekstgr.visFilmer(temp, 0, temp.length);
 
@@ -225,7 +225,7 @@ public class Meny {
 	}
 
 	public void sokProd(JTextField tfInput) {
-		Film[] temp = filma.sokProdusent(tfInput.getText());
+		Film[] temp = filma.siftProducer(tfInput.getText());
 
 		String str = tekstgr.visFilmer(temp, 0, temp.length);
 
@@ -241,7 +241,7 @@ public class Meny {
 
 		mainVinduTA.setText(""); // fjerne tekst fra TextArea i hoved vindu
 		mainVinduTA.append(tekstgr.printFilmCategory());
-		mainVinduTA.append(tekstgr.visFilmer(filma.hentFilmTabell(), 0, filma.hentFilmTabell().length));
+		mainVinduTA.append(tekstgr.visFilmer(filma.retrieveFilmArray(), 0, filma.retrieveFilmArray().length));
 
 		mb.remove(hjelp); // fjerner Hjelp meny, legger til Arkiv meny, legger til Hjelp meny
 		mb.add(arkiv);
@@ -253,7 +253,7 @@ public class Meny {
 	public void info() {
 		mainVinduTA.setText("");
 		mainVinduTA.append(tekstgr.skrivUtStatistikk(filma) + "\n\n\n\n");
-		mainVinduTA.append(tekstgr.visFilmer(filma.hentFilmTabell(), 0, filma.hentFilmTabell().length));
+		mainVinduTA.append(tekstgr.visFilmer(filma.retrieveFilmArray(), 0, filma.retrieveFilmArray().length));
 
 	}
 

@@ -7,8 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import no.hvl.dat102.adt.Filmarkiv;
-import no.hvl.dat102.adt.FilmarkivADT;
+import no.hvl.dat102.adt.FilmArchiveADT;
 import no.hvl.dat102.klient.KlientFilmarkiv;
 
 /**
@@ -18,14 +17,14 @@ import no.hvl.dat102.klient.KlientFilmarkiv;
 /*
  * Ref: Mughal: Java som første programmeringsspråk
  * 
- * En tekstfil består av tekstlinjer. En tekstlinje består av en sekvens av
- * tegn avsluttet med en linejavslutt-streng. Linjeavslutt-strengen er
+ * En tekstfil består av tekstlinjer. En tekstlinje består av en sekvens av tegn
+ * avsluttet med en linejavslutt-streng. Linjeavslutt-strengen er
  * plattformavhengig.
  * 
  * Vi bruker en tegnstrøm koblet til en bytestøm. Bytes blir lest fra
  * byte-innstrømmen og oversatt til Unicode-tegn av tegn-strømmen. Motsatt,
- * Unicode-tegn blir oversatt til bytes av tegn-utstrømmen og blir skrevet ut
- * av bytestømmen.
+ * Unicode-tegn blir oversatt til bytes av tegn-utstrømmen og blir skrevet ut av
+ * bytestømmen.
  * 
  */
 public class Fil {
@@ -40,13 +39,13 @@ public class Fil {
 	 * @return Referansen til Film-arkivet
 	 * @throws java.io.IOExceptsion
 	 */
-	public static FilmarkivADT lesFraFil(String filnavn) {
-		FilmarkivADT filmarkiv = null;
+	public static FilmArchiveADT lesFraFil(String filnavn) {
+		FilmArchiveADT filmarkiv = null;
 		try {
 			/*
 			 * 1 - FileReader Klassen FileReader sørger for at byte-innstrømmen blir
-			 * opprettet, sørger videre for at bytes fra filen blir tolket riktig som tegn
-			 * i flg. tegnkodingsformatet for plattformen.
+			 * opprettet, sørger videre for at bytes fra filen blir tolket riktig som tegn i
+			 * flg. tegnkodingsformatet for plattformen.
 			 */
 			FileReader ansFil = new FileReader(filnavn);
 
@@ -62,7 +61,7 @@ public class Fil {
 			String linje = innfil.readLine();
 			int n = Integer.parseInt(linje);
 
-			filmarkiv = KlientFilmarkiv.sendNytt(n);
+			filmarkiv = KlientFilmarkiv.sendNewArchive(n);
 
 			// 4 - Les postene, en hel post om gangen
 			for (int i = 0; i < n; i++) {
@@ -81,7 +80,7 @@ public class Fil {
 
 				Film film = new Film(nr, produsent, tittel, aar, sj, selskap);
 
-				filmarkiv.leggTilFilm(film);
+				filmarkiv.addMovie(film);
 
 			}
 
@@ -101,7 +100,7 @@ public class Fil {
 
 	}// metode
 
-	public static void skrivTilFil(FilmarkivADT filma, String filnavn) {
+	public static void skrivTilFil(FilmArchiveADT filma, String filnavn) {
 		try {
 			/*
 			 * 1 - FileWriter Definerer et FileWriter-objekt som åpner filen. Byte-strøm
@@ -124,23 +123,28 @@ public class Fil {
 			 * 
 			 */
 			PrintWriter utfil = new PrintWriter(ansFil);
-			int antall = filma.antall();
-			// Skriver inn text fil 
+			int antall = filma.size();
+			// Skriver inn text fil
 			utfil.println(antall);
-			Film[] tabell = filma.hentFilmTabell();
+			Film[] tabell = filma.retrieveFilmArray();
 			for (int i = 0; i < antall; i++) {
-				// 3 - Skriver postene, felt for felt
-				utfil.print(tabell[i].getFilmID());
-				utfil.print(SKILLE);
-				utfil.print(tabell[i].getProdusent());
-				utfil.print(SKILLE);
-				utfil.print(tabell[i].getTittel());
-				utfil.print(SKILLE);
-				utfil.print(tabell[i].getAar());
-				utfil.print(SKILLE);
-				utfil.print(tabell[i].getSjanger());
-				utfil.print(SKILLE);
-				utfil.println(tabell[i].getFilmselskap());
+
+				if (tabell[i] != null) {
+
+					// 3 - Skriver postene, felt for felt
+					utfil.print(tabell[i].getFilmID());
+					utfil.print(SKILLE);
+					utfil.print(tabell[i].getProdusent());
+					utfil.print(SKILLE);
+					utfil.print(tabell[i].getTittel());
+					utfil.print(SKILLE);
+					utfil.print(tabell[i].getAar());
+					utfil.print(SKILLE);
+					utfil.print(tabell[i].getSjanger());
+					utfil.print(SKILLE);
+					utfil.println(tabell[i].getFilmselskap());
+
+				}
 			} // for
 				// 4 - Lukk filen
 			utfil.close();

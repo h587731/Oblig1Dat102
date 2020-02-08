@@ -3,7 +3,7 @@ package no.hvl.dat102.adt;
 import no.hvl.dat102.Film;
 import no.hvl.dat102.Sjanger;
 
-public class Filmarkiv2 implements FilmarkivADT {
+public class FilmArchiveLL implements FilmArchiveADT {
 
 	public class LinearNode<T> {
 
@@ -38,7 +38,7 @@ public class Filmarkiv2 implements FilmarkivADT {
 	private LinearNode<Film> start; // start
 	private int antall;
 
-	public Filmarkiv2(int antall) {
+	public FilmArchiveLL(int antall) {
 
 		this.antall = 0;
 		start = null;
@@ -46,7 +46,7 @@ public class Filmarkiv2 implements FilmarkivADT {
 	}
 
 	@Override
-	public void leggTilFilm(Film nyFilm) {
+	public void addMovie(Film nyFilm) {
 
 		if (start == null) {
 
@@ -55,27 +55,25 @@ public class Filmarkiv2 implements FilmarkivADT {
 			return;
 		}
 
-		LinearNode<Film> current = start;
-		LinearNode<Film> newFilm = new LinearNode<Film>(nyFilm);
-
-		while (current.getNeste() != null) {
-
-			current = current.getNeste();
-
-		}
-		current.setNeste(newFilm);
+//		LinearNode<Film> current = start;
+//		LinearNode<Film> newFilm = new LinearNode<Film>(nyFilm);
+//
+//		while (current.getNeste() != null) {
+//			current = current.getNeste();
+//		}
+//		current.setNeste(newFilm);
 		// add legg
-//		LinearNode <Film> ny = new LinearNode<Film>(nyFilm);
-//		
-//		LinearNode<Film> temp = start;
-//		start = ny;
-//		start.setNeste(temp);
+
+		LinearNode<Film> ny = new LinearNode<Film>(nyFilm);
+		LinearNode<Film> temp = start;
+		start = ny;
+		start.setNeste(temp);
 		antall++;
 
 	}
 
 	@Override
-	public boolean slettFilm(int filmNr) {
+	public boolean removeFilm(int filmNr) {
 
 		LinearNode<Film> temp = start;
 		LinearNode<Film> prev = null;
@@ -101,7 +99,7 @@ public class Filmarkiv2 implements FilmarkivADT {
 	}
 
 	@Override
-	public Film[] sokTittel(String delstreng) {
+	public Film[] siftTitle(String delstreng) {
 
 		Film searchTab[] = new Film[antall];
 		LinearNode<Film> temp = start;
@@ -125,7 +123,7 @@ public class Filmarkiv2 implements FilmarkivADT {
 	}
 
 	@Override
-	public Film[] sokProdusent(String delstreng) {
+	public Film[] siftProducer(String delstreng) {
 
 		Film searchTab[] = new Film[antall];
 		LinearNode<Film> temp = start;
@@ -155,13 +153,13 @@ public class Filmarkiv2 implements FilmarkivADT {
 	}
 
 	@Override
-	public int antall() {
+	public int size() {
 
 		return antall;
 	}
 
 	@Override
-	public Film[] hentFilmTabell() {
+	public Film[] retrieveFilmArray() {
 
 		if (antall == 0) {
 			return new Film[0];
