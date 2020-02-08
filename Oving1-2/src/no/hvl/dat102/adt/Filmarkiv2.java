@@ -114,7 +114,7 @@ public class Filmarkiv2 implements FilmarkivADT {
 
 		while (temp != null) {
 
-			if (temp.getElement().getTittel().contains(delstreng)) {
+			if (temp.getElement().getTittel().toLowerCase().contains(delstreng.toLowerCase())) {
 
 				searchTab[sokTall] = temp.getElement();
 				sokTall++;
@@ -130,6 +130,7 @@ public class Filmarkiv2 implements FilmarkivADT {
 
 	@Override
 	public Film[] sokProdusent(String delstreng) {
+
 		Film searchTab[] = new Film[antall];
 		LinearNode<Film> temp = start;
 
@@ -137,7 +138,7 @@ public class Filmarkiv2 implements FilmarkivADT {
 
 		while (temp != null) {
 
-			if (temp.getElement().getProdusent().contains(delstreng)) {
+			if (temp.getElement().getProdusent().toLowerCase().contains(delstreng.toLowerCase())) {
 
 				searchTab[sokTall] = temp.getElement();
 				sokTall++;
