@@ -238,21 +238,11 @@ public class Meny {
 	}
 
 	public void refresh() {
+
 		mainVinduTA.setText(""); // fjerne tekst fra TextArea i hoved vindu
-
 		mainVinduTA.append(tekstgr.printFilmCategory());
+		mainVinduTA.append(tekstgr.visFilmer(filma.hentFilmTabell(), 0, filma.hentFilmTabell().length));
 
-		if (false) {
-
-			mainVinduTA.append(tekstgr.visFilmer(filma.hentFilmTabell(), 0, 40));
-			SwingUtilities.updateComponentTreeUI(mainVindu);
-			mainVinduTA.append(tekstgr.visFilmer(filma.hentFilmTabell(), 40, filma.hentFilmTabell().length));
-		} else {
-			mainVinduTA.append(tekstgr.visFilmer(filma.hentFilmTabell(), 0, filma.hentFilmTabell().length));// skriver
-																											// innhold i
-																											// arkiv i
-																											// textArea
-		}
 		mb.remove(hjelp); // fjerner Hjelp meny, legger til Arkiv meny, legger til Hjelp meny
 		mb.add(arkiv);
 		mb.add(hjelp);

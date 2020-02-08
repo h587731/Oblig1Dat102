@@ -81,18 +81,14 @@ public class Filmarkiv2 implements FilmarkivADT {
 		LinearNode<Film> prev = null;
 
 		if (temp != null && temp.getElement().getFilmID() == filmNr) {
-
 			start = temp.getNeste();
 			antall--;
 			return true;
-
 		}
 
 		while (temp != null && temp.getElement().getFilmID() != filmNr) {
-
 			prev = temp;
 			temp = temp.getNeste();
-
 		}
 
 		if (temp == null)
