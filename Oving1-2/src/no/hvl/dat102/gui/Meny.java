@@ -53,7 +53,7 @@ public class Meny {
 
 		// Main vindu
 		mainVindu.setSize(1325, 800); // setter opp main vindu
-		
+
 		// scroll funksjon i textArea
 		JScrollPane scrollPane = new JScrollPane(mainVinduTA, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -71,7 +71,7 @@ public class Meny {
 		mb.add(hjelp);
 
 		// lager meny elementer, og deres under elementer og fester dem med metoder og
-		// action listener
+		// action listener med metoden attachComponents
 		MenyComponent.attachComponents(fil, this, "Nytt", "Opprett", 1);
 		MenyComponent.attachComponents(fil, this, "Åpne", "Åpne", 2);
 		MenyComponent.attachComponents(fil, this, "Lagre", "Lagre", 3);
@@ -216,6 +216,7 @@ public class Meny {
 		String str = tekstgr.visFilmer(temp, 0, temp.length);
 
 		mainVinduTA.setText("");
+		mainVinduTA.append(tekstgr.printFilmCategory());
 		mainVinduTA.append(str);
 		// vise resultat av listen
 		// ta tabell fra Filmarkiv.sok og kjøre igjennom tekstgrensesnitt metode kalt

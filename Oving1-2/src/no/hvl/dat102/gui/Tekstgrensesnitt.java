@@ -46,20 +46,19 @@ public class Tekstgrensesnitt {
 
 	}
 
-	public String visFilmer(Film[] filmene, int start , int end) {
-		String str= "";
-		
-		
-		for(int i = start; i < end   ; i++) {
-			str = str + String.format("%-45s  %4d   %-35s   %-25s   %-15s   %4d%n", filmene[i].getTittel(), filmene[i].getAar(),
-					filmene[i].getFilmselskap(), filmene[i].getProdusent(),
-					filmene[i].getSjanger().toString().substring(0, 1).toUpperCase()
-							+ filmene[i].getSjanger().toString().toLowerCase().substring(1),
-							filmene[i].getFilmID());
-					
-		
+	public String visFilmer(Film[] filmene, int start, int end) {
+		String str = "";
+
+		for (int i = start; i < end; i++) {
+			if (filmene[i] != null) {
+				str = str + String.format("%-45s  %4d   %-35s   %-25s   %-15s   %4d%n", filmene[i].getTittel(),
+						filmene[i].getAar(), filmene[i].getFilmselskap(), filmene[i].getProdusent(),
+						filmene[i].getSjanger().toString().substring(0, 1).toUpperCase()
+								+ filmene[i].getSjanger().toString().toLowerCase().substring(1),
+						filmene[i].getFilmID());
+
+			}
 		}
-		
 
 //		for (Film film : filmene) {
 //			if (film == null)
@@ -77,31 +76,32 @@ public class Tekstgrensesnitt {
 	}
 
 	// Skrive ut alle Filmermed en spesiell delstreng i tittelen
-		// TODO
+	// TODO
 	public void skrivUtFilmDelstrengITittel(FilmarkivADT filma, String delstreng) {
-		Film[] utTittel =  filma.sokTittel(delstreng);
-		visFilmer(utTittel, 0 , utTittel.length );
+		Film[] utTittel = filma.sokTittel(delstreng);
+		visFilmer(utTittel, 0, utTittel.length);
 	}
+
 // TODO
 	// Skriver ut alle Filmerav en produsent/ en gruppe
 	public void skrivUtFilmProdusent(FilmarkivADT filma, String delstreng) {
 		Film[] utProd = filma.sokProdusent(delstreng);
-		visFilmer(utProd, 0 , utProd.length);
+		visFilmer(utProd, 0, utProd.length);
 
 	}
-    //  notasjon O er=1+ 4n 
-	
+	// notasjon O er=1+ 4n
+
 	// n⁴ / 4n
 	//
 	// Skrive ut en enkel statistikk som inneholder antall Filmertotalt
 	// og hvor mange det er i hver sjanger
 	public String skrivUtStatistikk(FilmarkivADT filma) {
-String str = "Filmer  : " + filma.antall() + "\n";
-	str = str + "Action  : " + filma.antallSjanger(Sjanger.ACTION) + "\n";
+		String str = "Filmer  : " + filma.antall() + "\n";
+		str = str + "Action  : " + filma.antallSjanger(Sjanger.ACTION) + "\n";
 		str = str + "Drama   : " + filma.antallSjanger(Sjanger.DRAMA) + "\n";
 		str = str + "Historie: " + filma.antallSjanger(Sjanger.HISTORY) + "\n";
 		str = str + "Scfi    : " + filma.antallSjanger(Sjanger.SCFI) + "\n";
-		
+
 		return str;
 
 	}
