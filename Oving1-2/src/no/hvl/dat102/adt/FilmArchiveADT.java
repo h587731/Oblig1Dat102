@@ -19,14 +19,14 @@ public interface FilmArchiveADT {
 	
 	// Søker og henter Filmermed en gitt delstreng
 	
-	Film[] siftTitle(String delstreng);
+	Film[] searchTitle(String delstreng);
 	
 	// Søker og henter produsenter med en gitt delstreng
 	
-	Film[] siftProducer(String delstreng);
+	Film[] searchProducer(String delstreng);
 	
 	// Henter antall Filmerfor en gitt sjanger
-	int antallSjanger(Sjanger sjanger);
+	int genreAmount(Sjanger sjanger);
 
 	// Returnerer antall Filmer
 	int size();

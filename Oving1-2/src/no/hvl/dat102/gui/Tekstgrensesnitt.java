@@ -78,14 +78,14 @@ public class Tekstgrensesnitt {
 	// Skrive ut alle Filmermed en spesiell delstreng i tittelen
 	// TODO
 	public void skrivUtFilmDelstrengITittel(FilmArchiveADT filma, String delstreng) {
-		Film[] utTittel = filma.siftTitle(delstreng);
+		Film[] utTittel = filma.searchTitle(delstreng);
 		visFilmer(utTittel, 0, utTittel.length);
 	}
 
 // TODO
 	// Skriver ut alle Filmerav en produsent/ en gruppe
 	public void skrivUtFilmProdusent(FilmArchiveADT filma, String delstreng) {
-		Film[] utProd = filma.siftProducer(delstreng);
+		Film[] utProd = filma.searchProducer(delstreng);
 		visFilmer(utProd, 0, utProd.length);
 
 	}
@@ -97,10 +97,10 @@ public class Tekstgrensesnitt {
 	// og hvor mange det er i hver sjanger
 	public String skrivUtStatistikk(FilmArchiveADT filma) {
 		String str = "Filmer  : " + filma.size() + "\n";
-		str = str + "Action  : " + filma.antallSjanger(Sjanger.ACTION) + "\n";
-		str = str + "Drama   : " + filma.antallSjanger(Sjanger.DRAMA) + "\n";
-		str = str + "Historie: " + filma.antallSjanger(Sjanger.HISTORY) + "\n";
-		str = str + "Scfi    : " + filma.antallSjanger(Sjanger.SCFI) + "\n";
+		str = str + "Action  : " + filma.genreAmount(Sjanger.ACTION) + "\n";
+		str = str + "Drama   : " + filma.genreAmount(Sjanger.DRAMA) + "\n";
+		str = str + "Historie: " + filma.genreAmount(Sjanger.HISTORY) + "\n";
+		str = str + "Scfi    : " + filma.genreAmount(Sjanger.SCFI) + "\n";
 
 		return str;
 

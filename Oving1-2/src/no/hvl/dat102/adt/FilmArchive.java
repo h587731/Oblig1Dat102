@@ -132,7 +132,7 @@ public class FilmArchive implements FilmArchiveADT {
 	}
 
 	@Override
-	public Film[] siftTitle(String delstreng) {
+	public Film[] searchTitle(String delstreng) {
 
 		// Oppretter tabell hvor vi legger funn fra s�k
 		Film[] sokTab = new Film[size];
@@ -158,7 +158,7 @@ public class FilmArchive implements FilmArchiveADT {
 	}
 
 	@Override
-	public Film[] siftProducer(String delstreng) {
+	public Film[] searchProducer(String delstreng) {
 		Film[] sokTab = new Film[size];
 		int sokTall = 0;
 
@@ -177,7 +177,7 @@ public class FilmArchive implements FilmArchiveADT {
 	}
 
 	@Override
-	public int antallSjanger(Sjanger sjanger) {
+	public int genreAmount(Sjanger sjanger) {
 		int sjangAnt = 0;
 
 		for (Film obj : filmArray) {

@@ -211,7 +211,7 @@ public class Meny {
 	}
 
 	public void sokTittel(JTextField tfInput) {
-		Film[] temp = filma.siftTitle(tfInput.getText());
+		Film[] temp = filma.searchTitle(tfInput.getText());
 
 		String str = tekstgr.visFilmer(temp, 0, temp.length);
 
@@ -225,7 +225,7 @@ public class Meny {
 	}
 
 	public void sokProd(JTextField tfInput) {
-		Film[] temp = filma.siftProducer(tfInput.getText());
+		Film[] temp = filma.searchProducer(tfInput.getText());
 
 		String str = tekstgr.visFilmer(temp, 0, temp.length);
 

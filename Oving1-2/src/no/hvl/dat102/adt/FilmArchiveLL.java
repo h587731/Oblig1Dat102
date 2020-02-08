@@ -99,7 +99,7 @@ public class FilmArchiveLL implements FilmArchiveADT {
 	}
 
 	@Override
-	public Film[] siftTitle(String delstreng) {
+	public Film[] searchTitle(String delstreng) {
 
 		Film searchTab[] = new Film[antall];
 		LinearNode<Film> temp = start;
@@ -123,7 +123,7 @@ public class FilmArchiveLL implements FilmArchiveADT {
 	}
 
 	@Override
-	public Film[] siftProducer(String delstreng) {
+	public Film[] searchProducer(String delstreng) {
 
 		Film searchTab[] = new Film[antall];
 		LinearNode<Film> temp = start;
@@ -147,9 +147,21 @@ public class FilmArchiveLL implements FilmArchiveADT {
 	}
 
 	@Override
-	public int antallSjanger(Sjanger sjanger) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int genreAmount(Sjanger sjanger) {
+		int amount = 0;
+		LinearNode<Film> temp = start;
+
+		while (temp != null) {
+
+			if (sjanger.equals(temp.getElement().getSjanger())) {
+
+				amount++;
+			}
+
+			temp = temp.getNeste();
+		}
+
+		return amount;
 	}
 
 	@Override
@@ -175,7 +187,6 @@ public class FilmArchiveLL implements FilmArchiveADT {
 
 		}
 
-		// TODO Auto-generated method stub
 		return tab;
 	}
 
