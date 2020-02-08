@@ -154,7 +154,6 @@ public class FilmArchiveLL implements FilmArchiveADT {
 		while (temp != null) {
 
 			if (sjanger.equals(temp.getElement().getSjanger())) {
-
 				amount++;
 			}
 

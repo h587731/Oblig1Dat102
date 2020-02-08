@@ -91,7 +91,7 @@ public class Tekstgrensesnitt {
 	}
 	// notasjon O er=1+ 4n
 
-	// n⁴ / 4n
+	// 1 + 4n = O(n)
 	//
 	// Skrive ut en enkel statistikk som inneholder antall Filmertotalt
 	// og hvor mange det er i hver sjanger
