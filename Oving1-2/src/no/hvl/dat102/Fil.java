@@ -7,7 +7,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import no.hvl.dat102.adt.Filmarkiv;
 import no.hvl.dat102.adt.FilmarkivADT;
 import no.hvl.dat102.klient.KlientFilmarkiv;
 
@@ -18,14 +17,14 @@ import no.hvl.dat102.klient.KlientFilmarkiv;
 /*
  * Ref: Mughal: Java som første programmeringsspråk
  * 
- * En tekstfil består av tekstlinjer. En tekstlinje består av en sekvens av
- * tegn avsluttet med en linejavslutt-streng. Linjeavslutt-strengen er
+ * En tekstfil består av tekstlinjer. En tekstlinje består av en sekvens av tegn
+ * avsluttet med en linejavslutt-streng. Linjeavslutt-strengen er
  * plattformavhengig.
  * 
  * Vi bruker en tegnstrøm koblet til en bytestøm. Bytes blir lest fra
  * byte-innstrømmen og oversatt til Unicode-tegn av tegn-strømmen. Motsatt,
- * Unicode-tegn blir oversatt til bytes av tegn-utstrømmen og blir skrevet ut
- * av bytestømmen.
+ * Unicode-tegn blir oversatt til bytes av tegn-utstrømmen og blir skrevet ut av
+ * bytestømmen.
  * 
  */
 public class Fil {
@@ -40,13 +39,13 @@ public class Fil {
 	 * @return Referansen til Film-arkivet
 	 * @throws java.io.IOExceptsion
 	 */
-	public static FilmarkivADT lesFraFil(String filnavn) {
+	public static FilmarkivADT lesFraFil(String filnavn, boolean typeStruktur, int start, int slutt) {
 		FilmarkivADT filmarkiv = null;
 		try {
 			/*
 			 * 1 - FileReader Klassen FileReader sørger for at byte-innstrømmen blir
-			 * opprettet, sørger videre for at bytes fra filen blir tolket riktig som tegn
-			 * i flg. tegnkodingsformatet for plattformen.
+			 * opprettet, sørger videre for at bytes fra filen blir tolket riktig som tegn i
+			 * flg. tegnkodingsformatet for plattformen.
 			 */
 			FileReader ansFil = new FileReader(filnavn);
 
@@ -62,10 +61,10 @@ public class Fil {
 			String linje = innfil.readLine();
 			int n = Integer.parseInt(linje);
 
-			filmarkiv = KlientFilmarkiv.sendNytt(n);
+			filmarkiv = KlientFilmarkiv.sendNytt(n, typeStruktur);
 
 			// 4 - Les postene, en hel post om gangen
-			for (int i = 0; i < n; i++) {
+			for (int i = start; i < slutt; i++) {
 				String post = innfil.readLine();
 
 				String[] felt = post.split(SKILLE);
@@ -125,7 +124,7 @@ public class Fil {
 			 */
 			PrintWriter utfil = new PrintWriter(ansFil);
 			int antall = filma.antall();
-			// Skriver inn text fil 
+			// Skriver inn text fil
 			utfil.println(antall);
 			Film[] tabell = filma.hentFilmTabell();
 			for (int i = 0; i < antall; i++) {
