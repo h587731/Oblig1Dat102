@@ -26,7 +26,7 @@ public class MenyComponent {
 	private JButton button;
 	private JTextField textField;
 
-	// text fields for skjema
+	// Text felt for legg til skjema
 	private JTextField tittel = new JTextField(10);
 	private JTextField produsent = new JTextField(10);
 	private JTextField selskap = new JTextField(10);
@@ -61,7 +61,7 @@ public class MenyComponent {
 
 			break;
 		case 2:
-			main.openFil2(menyComponent.textField, main);
+
 			main.openFile(menyComponent.textField, main);
 
 			break;
@@ -94,12 +94,12 @@ public class MenyComponent {
 			main.info();
 			break;
 		case 11:
-			main.setTypeStruktur(true);
+			main.setTypeStruktur(false);
 			main.startRefresh();
 			// festet fil til menybar
 			break;
 		case 12:
-			main.setTypeStruktur(false);
+			main.setTypeStruktur(true);
 			main.startRefresh();
 			break;
 
@@ -119,7 +119,7 @@ public class MenyComponent {
 	 * @param metodeNR  brukt for å velge riktig metode til riktig knapp, sendes
 	 *                  videre til choosemethod()
 	 */
-	public static void attachComponents(JMenu menu, Meny main, String menuItemS, String buttonS, int metodeNR) {
+	public void attachComponents(JMenu menu, Meny main, String menuItemS, String buttonS, int metodeNR) {
 
 		// lager Popup vindu, menyelement (feks lagre som), panel, knapp og tekstfield
 		// til popup vindu

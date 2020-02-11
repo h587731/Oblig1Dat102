@@ -53,6 +53,7 @@ public class Meny {
 	private JMenu fil = new JMenu("Fil");
 	private JMenu hjelp = new JMenu("Hjelp");
 	private JMenu arkiv = new JMenu("Arkiv");
+	private MenyComponent comp = new MenyComponent();
 
 	public Meny(FilmarkivADT filma) {
 		tekstgr = new Tekstgrensesnitt();
@@ -86,18 +87,18 @@ public class Meny {
 		// lager meny elementer, og deres under elementer og fester dem med metoder og
 		// action listener med metoden attachComponents
 
-		MenyComponent.attachComponents(fil, this, "Nytt", "Opprett", 1);
-		MenyComponent.attachComponents(fil, this, "Åpne", "Åpne", 2);
+		comp.attachComponents(fil, this, "Nytt", "Opprett", 1);
+		comp.attachComponents(fil, this, "Åpne", "Åpne", 2);
 
-		MenyComponent.attachComponents(arkiv, this, "Legg til", "Legg til film", 5);
-		MenyComponent.attachComponents(arkiv, this, "Slett", "Slett filmerID", 6);
-		MenyComponent.attachComponents(arkiv, this, "Søk Tittel", "Søk", 7);
-		MenyComponent.attachComponents(arkiv, this, "Søk Produsent", "Søk", 9);
-		MenyComponent.attachComponents(arkiv, this, "Info", "", 10);
+		comp.attachComponents(arkiv, this, "Legg til", "Legg til film", 5);
+		comp.attachComponents(arkiv, this, "Slett", "Slett filmerID", 6);
+		comp.attachComponents(arkiv, this, "Søk Tittel", "Søk", 7);
+		comp.attachComponents(arkiv, this, "Søk Produsent", "Søk", 9);
+		comp.attachComponents(arkiv, this, "Info", "", 10);
 
-		MenyComponent.attachComponents(hjelp, this, "Hjelp", "", 8);
-		MenyComponent.attachComponents(start, this, "Tabbel Arkiv", "", 11);
-		MenyComponent.attachComponents(start, this, "LinketListe Arkiv", "", 12);
+		comp.attachComponents(hjelp, this, "Hjelp", "", 8);
+		comp.attachComponents(start, this, "Tabbel Arkiv", "", 11);
+		comp.attachComponents(start, this, "LinketListe Arkiv", "", 12);
 
 		// exit betingelser som lagrer ved lukking av programmet
 		mainVindu.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -141,26 +142,6 @@ public class Meny {
 		filma = ny; // sier at Filma referansen skal peke på det nye filmarkiv objectet
 
 		refresh();
-	}
-
-	public void openFil2(JTextField tfInput, Meny main) {
-		String x = tfInput.getText();
-
-		FilmarkivADT sizeCheck = Fil.lesFraFil(x + ".txt", isTypeStruktur(), 0, 0);
-		System.out.println(sizeCheck.hentFilmTabell().length);
-
-		String str = "";
-		if (sizeCheck.hentFilmTabell().length > 100) {
-
-			filma = Fil.lesFraFil(x + ".txt", isTypeStruktur(), 0, 100);
-			str = (tekstgr.visFilmer(filma.hentFilmTabell(), 0, 100));
-
-		}
-
-		mainVinduTA.append(str);
-		SwingUtilities.updateComponentTreeUI(main.mainVinduTA);
-		refresh();
-
 	}
 
 	// metode som kalles nÅr Åpne knapp i openVindu trykkes
@@ -291,8 +272,8 @@ public class Meny {
 
 	public void festLagreMeny() {
 		if (!lagtTil) {
-			MenyComponent.attachComponents(fil, this, "Lagre", "Lagre", 3);
-			MenyComponent.attachComponents(fil, this, "Lagre som", "Lagre som", 4);
+			comp.attachComponents(fil, this, "Lagre", "Lagre", 3);
+			comp.attachComponents(fil, this, "Lagre som", "Lagre som", 4);
 			lagtTil = true;
 
 		}
