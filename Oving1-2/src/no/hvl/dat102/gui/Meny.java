@@ -29,9 +29,19 @@ public class Meny {
 	private Tekstgrensesnitt tekstgr;
 	private FilmarkivADT filma;
 	private String filNavn = null;
-
+	private boolean typeStruktur;
+	private boolean lagtTil = false;
 	// Frame / mainvindu med panel og textArea( der hvor arkiv printes til)
 	private JFrame mainVindu = new JFrame("Verdens beste filmarkiv");
+
+	public boolean isTypeStruktur() {
+		return typeStruktur;
+	}
+
+	public void setTypeStruktur(boolean typeStruktur) {
+		this.typeStruktur = typeStruktur;
+	}
+
 	private JPanel mainPanel = new JPanel();
 	private JTextArea mainVinduTA = new JTextArea();
 
@@ -39,6 +49,7 @@ public class Meny {
 	private JMenuBar mb = new JMenuBar();
 
 	// Menyer
+	private JMenu start = new JMenu("Start");
 	private JMenu fil = new JMenu("Fil");
 	private JMenu hjelp = new JMenu("Hjelp");
 	private JMenu arkiv = new JMenu("Arkiv");
@@ -67,24 +78,28 @@ public class Meny {
 		mainVinduTA.setFont(font); // main vindu textArea font og uneditable
 		mainVinduTA.setEditable(false);
 		mainVinduTA.append("Velkommen!");
-		mb.add(fil); // festet fil til menybar
+		mb.add(start);
+
+		// mb.add(fil); // festet fil til menybar
 		mb.add(hjelp);
 
 		// lager meny elementer, og deres under elementer og fester dem med metoder og
 		// action listener med metoden attachComponents
+
 		MenyComponent.attachComponents(fil, this, "Nytt", "Opprett", 1);
 		MenyComponent.attachComponents(fil, this, "Åpne", "Åpne", 2);
-		MenyComponent.attachComponents(fil, this, "Lagre", "Lagre", 3);
-		MenyComponent.attachComponents(fil, this, "Lagre som", "Lagre som", 4);
+
 		MenyComponent.attachComponents(arkiv, this, "Legg til", "Legg til film", 5);
 		MenyComponent.attachComponents(arkiv, this, "Slett", "Slett filmerID", 6);
 		MenyComponent.attachComponents(arkiv, this, "Søk Tittel", "Søk", 7);
 		MenyComponent.attachComponents(arkiv, this, "Søk Produsent", "Søk", 9);
 		MenyComponent.attachComponents(arkiv, this, "Info", "", 10);
 
-		MenyComponent.attachComponents(hjelp, this, "Hjelp2", "", 8);
+		MenyComponent.attachComponents(hjelp, this, "Hjelp", "", 8);
+		MenyComponent.attachComponents(start, this, "Tabbel Arkiv", "", 11);
+		MenyComponent.attachComponents(start, this, "LinketListe Arkiv", "", 12);
 
-		// exit betingelser
+		// exit betingelser som lagrer ved lukking av programmet
 		mainVindu.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		mainVindu.addWindowListener(new WindowAdapter() {
 			@Override
@@ -119,10 +134,32 @@ public class Meny {
 
 		}
 
+		festLagreMeny();
 		filNavn = x; // setter filnavn til userinput fra textfield
-		FilmarkivADT ny = KlientFilmarkiv.sendNytt(0); // oppretter nytt film arkiv med størresle 0.
+		FilmarkivADT ny = KlientFilmarkiv.sendNytt(0, typeStruktur); // oppretter nytt film arkiv med størresle 0.
 		Fil.skrivTilFil(ny, filNavn + ".txt"); // skriver til fil. får da en text fil med kunn et nulltall. Altsa "0"
 		filma = ny; // sier at Filma referansen skal peke på det nye filmarkiv objectet
+
+		refresh();
+	}
+
+	public void openFil2(JTextField tfInput, Meny main) {
+		String x = tfInput.getText();
+
+		FilmarkivADT sizeCheck = Fil.lesFraFil(x + ".txt", isTypeStruktur(), 0, 0);
+		System.out.println(sizeCheck.hentFilmTabell().length);
+
+		String str = "";
+		if (sizeCheck.hentFilmTabell().length > 100) {
+
+			filma = Fil.lesFraFil(x + ".txt", isTypeStruktur(), 0, 100);
+			str = (tekstgr.visFilmer(filma.hentFilmTabell(), 0, 100));
+
+		}
+
+		mainVinduTA.append(str);
+		SwingUtilities.updateComponentTreeUI(main.mainVinduTA);
+		refresh();
 
 	}
 
@@ -139,22 +176,13 @@ public class Meny {
 			SwingUtilities.updateComponentTreeUI(mainVindu); // oppdaterer mainVindu slik at Arkiv meny vises
 			return;
 		}
-
+		FilmarkivADT sizeCheck = Fil.lesFraFil(x + ".txt", isTypeStruktur(), 0, 0);
 		filNavn = x; // lagrer filnavn string for lagring seinere
-
-//		FilmarkivADT sizeCheck = Fil.lesFraFil(x + ".txt" , 0, 0);
-//		System.out.println(sizeCheck.hentFilmTabell().length);
-//		
-//		if(sizeCheck.hentFilmTabell().length >100) {
-//		
-//			filma = Fil.lesFraFil(x + ".txt" , 0, 100);
-//			
-//			mainVinduTA.append(tekstgr.visFilmer(filma.hentFilmTabell(), 0, 100));
-//			SwingUtilities.updateComponentTreeUI(mainVinduTA);
-//		}
-
-		filma = Fil.lesFraFil(x + ".txt"); // leser fra fil med filnavn x + ".txt"
-
+		filma = Fil.lesFraFil(x + ".txt", isTypeStruktur(), 0, sizeCheck.hentFilmTabell().length); // leser fra fil med
+																									// filnavn x +
+																									// ".txt"
+		festLagreMeny();
+		refresh();
 	}
 
 	// Lagre
@@ -190,7 +218,8 @@ public class Meny {
 	// Metode som sletter tekst og skrive git gud
 	public void openHjelpKlikk() {
 		mainVinduTA.setText("");
-		mainVinduTA.append("git gud");
+		mainVinduTA.append(
+				"Velg først datastruktur for å håndtere arkivet.\nDerreter får du valgene Nytt, Åpne, Lagre og Lagre Som");
 	}
 
 	public void leggTilKlikk(MenyComponent textfields) {
@@ -248,6 +277,25 @@ public class Meny {
 		mb.add(hjelp);
 		mainVindu.setTitle("Arkiv: " + filNavn);
 		SwingUtilities.updateComponentTreeUI(mainVindu); // oppdaterer mainVindu slik at Arkiv meny vises
+	}
+
+	public void startRefresh() {
+
+		mb.remove(start);
+		mb.remove(hjelp); // fjerner Hjelp meny, legger til Arkiv meny, legger til Hjelp meny
+		mb.add(fil);
+		mb.add(hjelp);
+		KlientFilmarkiv.sendNytt(0, isTypeStruktur());
+		SwingUtilities.updateComponentTreeUI(mainVindu); // oppdaterer mainVindu slik at Arkiv meny vises
+	}
+
+	public void festLagreMeny() {
+		if (!lagtTil) {
+			MenyComponent.attachComponents(fil, this, "Lagre", "Lagre", 3);
+			MenyComponent.attachComponents(fil, this, "Lagre som", "Lagre som", 4);
+			lagtTil = true;
+
+		}
 	}
 
 	public void info() {
