@@ -39,7 +39,7 @@ public class Fil {
 	 * @return Referansen til Film-arkivet
 	 * @throws java.io.IOExceptsion
 	 */
-	public static FilmarkivADT lesFraFil(String filnavn, boolean typeStruktur, int start, int slutt) {
+	public static FilmarkivADT lesFraFil(String filnavn, boolean typeStruktur) {
 		FilmarkivADT filmarkiv = null;
 		try {
 			/*
@@ -64,24 +64,24 @@ public class Fil {
 			filmarkiv = KlientFilmarkiv.sendNytt(n, typeStruktur);
 
 			// 4 - Les postene, en hel post om gangen
-			for (int i = start; i < slutt; i++) {
+			for (int i = 0; i < n; i++) {
 				String post = innfil.readLine();
+				if (post != null) {
+					String[] felt = post.split(SKILLE);
+					int nr = Integer.parseInt(felt[0]);
 
-				String[] felt = post.split(SKILLE);
-				int nr = Integer.parseInt(felt[0]);
+					String produsent = felt[1];
 
-				String produsent = felt[1];
+					String tittel = felt[2];
+					int aar = Integer.parseInt(felt[3]);
+					String sjStr = felt[4];
+					Sjanger sj = Sjanger.finnSjanger(sjStr);
+					String selskap = felt[5];
 
-				String tittel = felt[2];
-				int aar = Integer.parseInt(felt[3]);
-				String sjStr = felt[4];
-				Sjanger sj = Sjanger.finnSjanger(sjStr);
-				String selskap = felt[5];
+					Film film = new Film(nr, produsent, tittel, aar, sj, selskap);
 
-				Film film = new Film(nr, produsent, tittel, aar, sj, selskap);
-
-				filmarkiv.leggTilFilm(film);
-
+					filmarkiv.leggTilFilm(film);
+				}
 			}
 
 			// 4 - Lukk filen
@@ -128,18 +128,22 @@ public class Fil {
 			utfil.println(antall);
 			Film[] tabell = filma.hentFilmTabell();
 			for (int i = 0; i < antall; i++) {
-				// 3 - Skriver postene, felt for felt
-				utfil.print(tabell[i].getFilmID());
-				utfil.print(SKILLE);
-				utfil.print(tabell[i].getProdusent());
-				utfil.print(SKILLE);
-				utfil.print(tabell[i].getTittel());
-				utfil.print(SKILLE);
-				utfil.print(tabell[i].getAar());
-				utfil.print(SKILLE);
-				utfil.print(tabell[i].getSjanger());
-				utfil.print(SKILLE);
-				utfil.println(tabell[i].getFilmselskap());
+
+				if (tabell[i] != null) {
+					// 3 - Skriver postene, felt for felt
+					utfil.print(tabell[i].getFilmID());
+					utfil.print(SKILLE);
+					utfil.print(tabell[i].getProdusent());
+					utfil.print(SKILLE);
+					utfil.print(tabell[i].getTittel());
+					utfil.print(SKILLE);
+					utfil.print(tabell[i].getAar());
+					utfil.print(SKILLE);
+					utfil.print(tabell[i].getSjanger());
+					utfil.print(SKILLE);
+					utfil.println(tabell[i].getFilmselskap());
+
+				}
 			} // for
 				// 4 - Lukk filen
 			utfil.close();

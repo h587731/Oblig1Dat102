@@ -6,31 +6,33 @@ import no.hvl.dat102.Sjanger;
 public class Filmarkiv implements FilmarkivADT {
 
 	private Film[] filmtabell;
-	private int antall;
+	private int tabellAntall;
+	private int filmAntall;
 
 	public Filmarkiv(int antall) {
-		this.antall = antall;
+		this.tabellAntall = antall;
 		this.filmtabell = new Film[antall];
+		this.filmAntall = 0;
 	}
 
 	@Override
 	public Film[] hentFilmTabell() {
-		// TODO Auto-generated method stub
 		return filmtabell;
 	}
 
 	private void utvidKapasitet() {
 		// eks. utvide 10
 
-		Film[] hjelpetabell = new Film[(filmtabell.length) + 1];
+		Film[] hjelpetabell = new Film[(int) Math.ceil(1.5 * filmtabell.length + 1)]; // + 1 i tilfelde for tabell
+																						// størrelse = 0. gange med null
+																						// er tull
 
 		for (int i = 0; i < filmtabell.length; i++) {
 			hjelpetabell[i] = filmtabell[i];
 		}
 
-		antall = antall + hjelpetabell.length - filmtabell.length;
 		filmtabell = hjelpetabell;
-
+		tabellAntall = filmtabell.length;
 	}
 
 	@Override
@@ -43,7 +45,8 @@ public class Filmarkiv implements FilmarkivADT {
 
 			filmtabell = tempTab;
 			filmtabell[0] = nyFilm;
-			antall = 1;
+			tabellAntall = 1;
+			filmAntall++;
 			ikkePlass = false;
 		} else {
 
@@ -51,14 +54,14 @@ public class Filmarkiv implements FilmarkivADT {
 			for (int i = 0; i < filmtabell.length; i++) {
 				if (filmtabell[i] == null) {
 					filmtabell[i] = nyFilm;
-
+					filmAntall++;
 					ikkePlass = false;
 					break;
 				}
 			}
 		}
 
-		// lage ny tabell om ikke plass
+		// utvidtabell om ikke plass og prøv igjen
 		if (ikkePlass) {
 
 			utvidKapasitet();
@@ -68,69 +71,109 @@ public class Filmarkiv implements FilmarkivADT {
 
 	}
 
-	private int pos = 0;
+	// først håndter special case om tabbel har 1 i størrelse
+	// dette vil ikke bli noe problem med for løkke iterering,
+	// men på linjen under lager vi ny tabell med størrekse -1
+	// Kan ikke ha tabell med størrelse -1
 
 	@Override
 	public boolean slettFilm(int filmNr) {
 
-		boolean harSlettet = false;
+		boolean hasRemoved = false;
 
-		// først håndter special case om tabbel har 1 i størrelse
-		if (filmtabell.length == 0) {
+		int fjernet = 0;
+		// If array is empty there are no films to remove.
+		if (filmAntall == 0) {
 			return false;
 		}
 
-		Film[] kopi = new Film[antall - 1];
+		// Om lengden er 1 må gjøre et special case ellers
+		// peker objectets peker til seg selv igjen etter sletting.
+		if (filmtabell.length == 1) {
+			if (filmNr == filmtabell[0].getFilmID() && filmtabell[0] != null) {
 
-// finn filmID
-
-		// set i = pos
-		for (int i = pos; i < filmtabell.length; i++) {
-			// lete etter filmNR
-			if (filmNr == filmtabell[i].getFilmID()) {
-
-				// match slette lage ny tabell - alts� skifter referansen til � peke p� samme
-				// object som siste referance peker p�
-				filmtabell[i] = filmtabell[antall - 1];
-				pos = i;
-				// kopier over gammel tabell til nye tabell som er 1 mindre
-				for (int k = 0; k < filmtabell.length - 1; k++) {
-					kopi[k] = filmtabell[k];
-
-				}
-
-				// oppdaterer antall og ny filmtabell og ser etter flere filmer � slette
-				antall--;
-				filmtabell = kopi;
-				slettFilm(filmNr);
-				pos = 0;
+				filmtabell[0] = null;
+				hasRemoved = true;
+				filmAntall--;
 				return true;
-
 			}
 
 		}
 
-		return harSlettet;
+		for (int i = 0; i < filmtabell.length - fjernet; i++) {
+
+			// Check if filmIDs match and that film != null
+			if (filmtabell[i] != null && filmNr == filmtabell[i].getFilmID()) {
+
+				// If a match is made. we change current reference to point to last object
+				// object can be null without critical failure.
+				hasRemoved = true;
+
+				// ved siste plass minus de vi har fjernet.
+				// elementene i slutten av tabbelen er no midlertidig duplikater
+				if (i == tabellAntall - 1 - fjernet) {
+					filmtabell[i] = null;
+					fjernet++;
+					filmAntall--;
+					break;
+				}
+				// per iteration ønsker vi ikke å lage duplikater.
+				// derfor for hvert funn(fjernet) peker vi en mindre av tabell størrelse
+				// null objecter er ikke problem og blir hoppet over av logikken i if() over
+				filmtabell[i] = filmtabell[tabellAntall - 1 - fjernet];
+				fjernet++;
+				filmAntall--;
+				i--;
+
+			}
+
+		}
+		// trimming og sortering( kun fjerner nullpunkter i mellom filmer) og fjerning
+		// av duplikat
+		if (hasRemoved) {
+
+			Film[] kopi = new Film[filmtabell.length - fjernet];
+			for (int k = 0; k < kopi.length; k++) {
+				if (filmtabell[k] != null) {
+					kopi[k] = filmtabell[k];
+				}
+
+			}
+			tabellAntall = tabellAntall - fjernet;
+			filmtabell = kopi;
+			return true;
+		}
+
+		// kopier over gammel tabell til nye tabell som er 1 mindre
+
+		return hasRemoved;
 	}
 
 	@Override
 	public Film[] sokTittel(String delstreng) {
 
-		// Oppretter tabell hvor vi legger funn fra s�k
-		Film[] sokTab = new Film[antall];
+		// Oppretter tabell hvor vi legger funn
+		// lengde lik størrelse
+		Film[] sokTab = new Film[tabellAntall];
 		int sokTall = 0;
 
 		// itererer igjennom filmarkivet og s�ker p� delstreng
-		for (Film obj : filmtabell) {
 
-			// om fokusert film.sinTittel har delstreng
-			if (obj.getTittel().contains(delstreng)) {
-				// legg til fun i s�ketabell
-				sokTab[sokTall] = obj;
-				// utvid siden vi satt den til � bare v�re 1 stor til � begynne med, blir s� 2 i
-				// st�rresle. utvides ved vert funn som er en d�rlig l�sning i hindsight
+		for (int i = 0; i < sokTab.length; i++) {
 
-				sokTall++;
+			// Filter for null object
+			if (filmtabell[i] != null) {
+
+				// Tar begge strings til lower case, for bredere søkeresultat og matcher med
+				// String metoden contains()
+				if (filmtabell[i].getTittel().toLowerCase().contains(delstreng.toLowerCase())) {
+
+					// legg til fun i søktabell
+					sokTab[sokTall] = filmtabell[i];
+					// sokTall må adderes slik at neste potensielle funn blir lagt 1 opp.
+					sokTall++;
+
+				}
 
 			}
 
@@ -141,15 +184,29 @@ public class Filmarkiv implements FilmarkivADT {
 
 	@Override
 	public Film[] sokProdusent(String delstreng) {
-		Film[] sokTab = new Film[antall];
+
+		// Oppretter tabell hvor vi legger funn
+		// lengde lik størrelse
+		Film[] sokTab = new Film[tabellAntall];
 		int sokTall = 0;
 
-		for (Film obj : filmtabell) {
+		// itererer igjennom filmarkivet og s�ker p� delstreng
 
-			if (obj.getProdusent().contains(delstreng)) {
-				sokTab[sokTall] = obj;
-				utvidKapasitet();
-				sokTall++;
+		for (int i = 0; i < sokTab.length; i++) {
+
+			// Filter for null object
+			if (filmtabell[i] != null) {
+
+				// Tar begge strings til lower case, for bredere søkeresultat og matcher med
+				// String metoden contains()
+				if (filmtabell[i].getProdusent().toLowerCase().contains(delstreng.toLowerCase())) {
+
+					// legg til fun i søktabell
+					sokTab[sokTall] = filmtabell[i];
+					// sokTall må adderes slik at neste potensielle funn blir lagt 1 opp.
+					sokTall++;
+
+				}
 
 			}
 
@@ -163,7 +220,7 @@ public class Filmarkiv implements FilmarkivADT {
 		int sjangAnt = 0;
 
 		for (Film obj : filmtabell) {
-			if (obj.getSjanger() == sjanger) {
+			if (obj != null && obj.getSjanger() == sjanger) {
 
 				sjangAnt++;
 			}
@@ -176,7 +233,7 @@ public class Filmarkiv implements FilmarkivADT {
 	@Override
 	public int antall() {
 		// TODO Auto-generated method stub
-		return antall;
+		return filmAntall;
 	}
 
 }

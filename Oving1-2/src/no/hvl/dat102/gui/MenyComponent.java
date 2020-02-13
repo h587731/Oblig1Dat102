@@ -71,7 +71,7 @@ public class MenyComponent {
 			break;
 		case 4:
 			main.lagreSomTilFil(menyComponent.textField);// Lagre som System.out.println("Thursday");
-			main.refresh();
+
 			break;
 		case 5:
 			main.leggTilKlikk(menyComponent);// Legg til
@@ -92,15 +92,6 @@ public class MenyComponent {
 			break;
 		case 10:
 			main.info();
-			break;
-		case 11:
-			main.setTypeStruktur(false);
-			main.startRefresh();
-			// festet fil til menybar
-			break;
-		case 12:
-			main.setTypeStruktur(true);
-			main.startRefresh();
 			break;
 
 		}
@@ -166,7 +157,7 @@ public class MenyComponent {
 
 		// åpner pop up vindu, setter frame til visable
 		// men ikke for meny 7 3
-		if (metodeNR != 8 && metodeNR != 3 && metodeNR != 10 && metodeNR != 11 && metodeNR != 12) {
+		if (metodeNR != 8 && metodeNR != 3 && metodeNR != 10) {
 			menyComposites.menyElement.addActionListener(new ActionListener() {
 
 				@Override

@@ -10,6 +10,7 @@ import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -49,7 +50,7 @@ public class Meny {
 	private JMenuBar mb = new JMenuBar();
 
 	// Menyer
-	private JMenu start = new JMenu("Start");
+
 	private JMenu fil = new JMenu("Fil");
 	private JMenu hjelp = new JMenu("Hjelp");
 	private JMenu arkiv = new JMenu("Arkiv");
@@ -62,6 +63,20 @@ public class Meny {
 	}
 
 	public void start() {
+
+		Object[] options = { "Tabell", "LinketListe", "Avbryt" };
+		int n = JOptionPane.showOptionDialog(new JFrame(), "Velg type arkivstruktur", "Filmarkivet 2000",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
+		if (n == -1 || n == 2)
+			return;
+
+		if (n == 1) {
+			setTypeStruktur(true);
+
+		} else {
+			setTypeStruktur(false);
+
+		}
 
 		// Main vindu
 		mainVindu.setSize(1325, 800); // setter opp main vindu
@@ -79,10 +94,10 @@ public class Meny {
 		mainVinduTA.setFont(font); // main vindu textArea font og uneditable
 		mainVinduTA.setEditable(false);
 		mainVinduTA.append("Velkommen!");
-		mb.add(start);
 
-		// mb.add(fil); // festet fil til menybar
+		mb.add(fil);
 		mb.add(hjelp);
+		filma = KlientFilmarkiv.sendNytt(0, isTypeStruktur());
 
 		// lager meny elementer, og deres under elementer og fester dem med metoder og
 		// action listener med metoden attachComponents
@@ -97,8 +112,6 @@ public class Meny {
 		comp.attachComponents(arkiv, this, "Info", "", 10);
 
 		comp.attachComponents(hjelp, this, "Hjelp", "", 8);
-		comp.attachComponents(start, this, "Tabbel Arkiv", "", 11);
-		comp.attachComponents(start, this, "LinketListe Arkiv", "", 12);
 
 		// exit betingelser som lagrer ved lukking av programmet
 		mainVindu.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -108,10 +121,8 @@ public class Meny {
 				if (filNavn != null) {
 					lagreTilFil();
 				}
-				// mainVindu.dispose();
-//				openVindu.dispose();
-//				opprettVindu.dispose();
-//				lagreSomVindu.dispose();
+				mainVindu.dispose();
+
 				System.exit(0);
 			}
 		});
@@ -125,8 +136,9 @@ public class Meny {
 			File opprettetFil = new File(x + ".txt");
 			if (opprettetFil.exists()) {
 
-				mainVinduTA.setText("");
-				mainVinduTA.append("Det finnes allerede en fil med samme navn. \nPrøv et annet navn");
+				JOptionPane.showMessageDialog(new JFrame(),
+						"Det finnes allerede en fil med samme navn. \nPrøv et annet navn", "Feil!",
+						JOptionPane.WARNING_MESSAGE);
 				return;
 			}
 			opprettetFil.createNewFile();
@@ -152,16 +164,16 @@ public class Meny {
 
 		File skjekk = new File(x + ".txt");
 		if (!skjekk.exists()) {
-			mainVinduTA.setText("");
-			mainVinduTA.append("Fil ikke funnet!");
-			SwingUtilities.updateComponentTreeUI(mainVindu); // oppdaterer mainVindu slik at Arkiv meny vises
+			JOptionPane.showMessageDialog(new JFrame(), "Fil ikke funnet! \nPrøv et annet navn", "Feil",
+					JOptionPane.WARNING_MESSAGE);
+
 			return;
 		}
-		FilmarkivADT sizeCheck = Fil.lesFraFil(x + ".txt", isTypeStruktur(), 0, 0);
+
 		filNavn = x; // lagrer filnavn string for lagring seinere
-		filma = Fil.lesFraFil(x + ".txt", isTypeStruktur(), 0, sizeCheck.hentFilmTabell().length); // leser fra fil med
-																									// filnavn x +
-																									// ".txt"
+		filma = Fil.lesFraFil(x + ".txt", isTypeStruktur()); // leser fra fil med
+																// filnavn x +
+																// ".txt"
 		festLagreMeny();
 		refresh();
 	}
@@ -178,12 +190,19 @@ public class Meny {
 
 		String x = tfInput.getText(); // lese text fra textfield
 		File skjekk = new File(x + ".txt"); // lager File object med string input + .text. Feks arkiv55.txt
-		if (skjekk.exists()) { // skjekker om det finnest i mappen fra før
+		try {
 
-			mainVinduTA.setText(""); // om fil med likt filnavn eksisterer gjør clean up og stop prosess
-			mainVinduTA.append("Det finnes allerede en fil med samme navn. \nPrøv et annet navn");
+			if (skjekk.exists()) {
+				JOptionPane.showMessageDialog(new JFrame(),
+						"Det finnes allerede en fil med samme navn. \nPrøv et annet navn", "Feil",
+						JOptionPane.WARNING_MESSAGE);
 
-			return;
+				return;
+			}
+			skjekk.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+
 		}
 
 		filNavn = x; // lagrer filnavn string for lagring seinere
@@ -193,7 +212,7 @@ public class Meny {
 		filma = temp; // får filma til å peke på temp object ( orginale filmarkivet vi ønsket å lagre)
 						// filma blir satt til et tomt filmarkiv i opprettArkiv()
 		lagreTilFil(); // lagrer til nye fil
-
+		refresh();
 	}
 
 	// Metode som sletter tekst og skrive git gud
@@ -205,18 +224,46 @@ public class Meny {
 
 	public void leggTilKlikk(MenyComponent textfields) {
 
-		Film temp = new Film(Integer.parseInt(textfields.getId().getText()), textfields.getProdusent().getText(),
-				textfields.getTittel().getText(), Integer.parseInt(textfields.getAar().getText()),
-				Sjanger.finnSjanger(textfields.getSjanger().getText()), textfields.getSelskap().getText());
+		String tittel = textfields.getTittel().getText();
+		String produsent = textfields.getProdusent().getText();
+		String selskap = textfields.getSelskap().getText();
 
-		// Skjekk alle innputs
-		filma.leggTilFilm(temp);
+		try {
+			if (tittel.isEmpty() || produsent.isEmpty() || selskap.isEmpty()) {
+				throw new RuntimeException("Tittel, produsent og selskap må ha tekstinput");
+			}
+
+			Film temp = new Film(Integer.parseInt(textfields.getId().getText()), textfields.getProdusent().getText(),
+					textfields.getTittel().getText(), Integer.parseInt(textfields.getAar().getText()),
+					Sjanger.finnSjanger(textfields.getSjanger().getText()), textfields.getSelskap().getText());
+
+			// Skjekk alle innputs
+			filma.leggTilFilm(temp);
+
+		} catch (NumberFormatException e) {
+
+			JOptionPane.showMessageDialog(new JFrame(), "Kun heltall! \nPrøv igjen", "Feil",
+					JOptionPane.WARNING_MESSAGE);
+
+		} catch (RuntimeException er) {
+
+			JOptionPane.showMessageDialog(new JFrame(), "Film trenger tittel, produsent \nog selskap! \nPrøv igjen",
+					"Feil", JOptionPane.WARNING_MESSAGE);
+
+		}
 
 	}
 
 	public void slettFilm(JTextField tfInput) {
+		try {
+			filma.slettFilm(Integer.parseInt((tfInput.getText())));
 
-		filma.slettFilm(Integer.parseInt((tfInput.getText())));
+		} catch (NumberFormatException e) {
+
+			JOptionPane.showMessageDialog(new JFrame(), "Kun heltall! \nPrøv igjen", "Feil",
+					JOptionPane.WARNING_MESSAGE);
+
+		}
 
 	}
 
@@ -240,6 +287,7 @@ public class Meny {
 		String str = tekstgr.visFilmer(temp, 0, temp.length);
 
 		mainVinduTA.setText("");
+		mainVinduTA.append(tekstgr.printFilmCategory());
 		mainVinduTA.append(str);
 		// vise resultat av listen
 		// ta tabell fra Filmarkiv.sok og kjøre igjennom tekstgrensesnitt metode kalt
@@ -262,12 +310,8 @@ public class Meny {
 
 	public void startRefresh() {
 
-		mb.remove(start);
 		mb.remove(hjelp); // fjerner Hjelp meny, legger til Arkiv meny, legger til Hjelp meny
-		mb.add(fil);
-		mb.add(hjelp);
-		KlientFilmarkiv.sendNytt(0, isTypeStruktur());
-		SwingUtilities.updateComponentTreeUI(mainVindu); // oppdaterer mainVindu slik at Arkiv meny vises
+
 	}
 
 	public void festLagreMeny() {
@@ -282,6 +326,9 @@ public class Meny {
 	public void info() {
 		mainVinduTA.setText("");
 		mainVinduTA.append(tekstgr.skrivUtStatistikk(filma) + "\n\n\n\n");
+
+		mainVinduTA.append(tekstgr.printFilmCategory());
+
 		mainVinduTA.append(tekstgr.visFilmer(filma.hentFilmTabell(), 0, filma.hentFilmTabell().length));
 
 	}

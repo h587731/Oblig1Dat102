@@ -6,6 +6,10 @@ import no.hvl.dat102.Film;
 import no.hvl.dat102.Sjanger;
 import no.hvl.dat102.adt.FilmarkivADT;
 
+/**
+ * @author Eskil Oscar Ehrensvärd, Per Otto Sande Furre
+ *
+ */
 public class Tekstgrensesnitt {
 	Scanner input = new Scanner(System.in);
 
@@ -42,7 +46,7 @@ public class Tekstgrensesnitt {
 	public String printFilmCategory() {
 
 		return String.format("%-45s  %-4s   %-35s   %-25s   %-15s   %-4s%n", "Film:", "År:", "Filmselskap:",
-				"Produsent:", "Sjanger:", "ID:");
+				"Produsent:", "Sjanger:", "ID:\n");
 
 	}
 
@@ -91,7 +95,6 @@ public class Tekstgrensesnitt {
 	}
 	// notasjon O er=1+ 4n
 
-	// n⁴ / 4n
 	//
 	// Skrive ut en enkel statistikk som inneholder antall Filmertotalt
 	// og hvor mange det er i hver sjanger
