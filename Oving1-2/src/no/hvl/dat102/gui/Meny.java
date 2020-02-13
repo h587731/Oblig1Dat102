@@ -23,25 +23,27 @@ import no.hvl.dat102.Sjanger;
 import no.hvl.dat102.adt.FilmarkivADT;
 import no.hvl.dat102.klient.KlientFilmarkiv;
 
+/**
+ * Gui klasse som jobber med FilmarkivADT, Tekstgrensesnitt MenyComponent, Fil
+ * og Film klassene. Tegner hoved rammen til gui vindu, og tegner så meste
+ * parten av komponenter via hjelpe klassen MenyComponent. Denne klassen var
+ * orginalt alene uten MenyComponent, og nær 900 linjer med kode. Så at det var
+ * ekstremt mye repetative kode struktur. Vi valgte derfor å skrive om til en
+ * mer generisk struktur og MenyComponent ble laget for å ta
+ * autogenereringsprossesen ut koden.
+ * 
+ * @author Eskil Oscar Ehrensvärd, Per Otto Sande Furre
+ *
+ */
 public class Meny {
 
 	private Font font = new Font("Courier New", Font.BOLD, 15);
-
 	private Tekstgrensesnitt tekstgr;
 	private FilmarkivADT filma;
 	private String filNavn = null;
 	private boolean typeStruktur;
 	private boolean lagtTil = false;
-	// Frame / mainvindu med panel og textArea( der hvor arkiv printes til)
 	private JFrame mainVindu = new JFrame("Verdens beste filmarkiv");
-
-	public boolean isTypeStruktur() {
-		return typeStruktur;
-	}
-
-	public void setTypeStruktur(boolean typeStruktur) {
-		this.typeStruktur = typeStruktur;
-	}
 
 	private JPanel mainPanel = new JPanel();
 	private JTextArea mainVinduTA = new JTextArea();
@@ -62,6 +64,19 @@ public class Meny {
 
 	}
 
+	/**
+	 * Kalles fra KlientArkiv ved start av main method.
+	 * 
+	 * Metode som bygger Gui. Venter først på svar fra bruker om type datastruktur
+	 * som skal brukes.
+	 * 
+	 * Lager Hoved frame med Swing objecter også lager vi resten av elementer med
+	 * comp objectet som kaller på attachComponents()
+	 * 
+	 * Setter så lagre på til exitAction
+	 * 
+	 * 
+	 */
 	public void start() {
 
 		Object[] options = { "Tabell", "LinketListe", "Avbryt" };
@@ -129,6 +144,16 @@ public class Meny {
 
 	}
 
+	/**
+	 * Oppretter arkiv fil. Metode som kalles fra methodChoice() i MenyComponnt
+	 * klassen. Som igjen blir kalt via actionListener som er festet til Opprett
+	 * nytt arkiv popup vindu.
+	 * 
+	 * tar inn string fra textfield fra popup vindu og tester om det finnest fil med
+	 * samme navn om fil navn ledig oppretter ny fil med filmarkiv størrelse 0.
+	 * 
+	 * @param tfInput textfield som er navn på fil vi ønsker opprettet.
+	 */
 	public void opprettArkiv(JTextField tfInput) {
 		String x = tfInput.getText(); // lese text fra textfield
 		// Skjekke om filnavn finnes
@@ -156,8 +181,16 @@ public class Meny {
 		refresh();
 	}
 
-	// metode som kalles nÅr Åpne knapp i openVindu trykkes
-	// leser input fra txtfield og Åpner doc
+	/**
+	 * Åpner ønsket fil om mulig Metode som kalles fra methodChoice() i MenyComponnt
+	 * klassen. Som igjen blir kalt via actionListener som er festet til Åpne nytt
+	 * arkiv popup vindu.
+	 * 
+	 * tar inn string fra textfield fra popup vindu og tester om det finnest fil med
+	 * samme navn. Åpner om det finnes
+	 * 
+	 * @param tfInput textfield som er navn på fil vi ønsker å Åpne
+	 */
 	public void openFile(JTextField tfInput, Meny main) {
 
 		String x = tfInput.getText(); // lese text fra textfield
@@ -178,14 +211,32 @@ public class Meny {
 		refresh();
 	}
 
-	// Lagre
-
+	/**
+	 * Lagrer filmarkiv til fil det ble lagret til opprettet, eller åpnet fra.
+	 * 
+	 * Metode som kalles fra methodChoice() i MenyComponnt klassen. Som igjen blir
+	 * kalt via actionListener som er festet til lagre valg i Fil meny.
+	 * 
+	 * Sender filnavn og filmarkiv til skrivTilFil()
+	 * 
+	 */
 	public void lagreTilFil() {
 
 		Fil.skrivTilFil(filma, filNavn + ".txt");
 
 	}
 
+	/**
+	 * Lagrer til ny fil om nyfil ikke eksisterer
+	 * 
+	 * Metode som kalles fra methodChoice() i MenyComponnt klassen. Som igjen blir
+	 * kalt via actionListener som er festet til LagreSom nytt arkiv popup vindu.
+	 * 
+	 * tar inn string fra textfield fra popup vindu og tester om det finnest fil med
+	 * samme navn. Om navn ledig. Oppretter nyfill med opprett() også lagreTilFil()
+	 * 
+	 * @param tfInput textfield som er navn på fil vi ønsker å Lagre til
+	 */
 	public void lagreSomTilFil(JTextField tfInput) {
 
 		String x = tfInput.getText(); // lese text fra textfield
@@ -215,19 +266,33 @@ public class Meny {
 		refresh();
 	}
 
-	// Metode som sletter tekst og skrive git gud
+	/**
+	 * Gir bruker kort informasjon
+	 * 
+	 */
 	public void openHjelpKlikk() {
 		mainVinduTA.setText("");
-		mainVinduTA.append(
-				"Velg først datastruktur for å håndtere arkivet.\nDerreter får du valgene Nytt, Åpne, Lagre og Lagre Som");
+		mainVinduTA.append("For å få tilgang på Arkiv-valg Åpne eller oppret Nytt Arkiv. \n"
+				+ "\n\nFor å teste hvilke filstruktur prøv å slette mer en en film med samme film ID"
+				+ "\ntabell strukturen sletter alle forekomster av sletteID mens linket\n"
+				+ "liste strukturen kun sletter første forekomst.\n\n" + "Får å få vekk denne teksten velg enten:\n"
+				+ "Nytt, Åpne, Lagre, LagreSom, søk tittel eller produsent med tomt tekstfelt" + "\neller vi info.");
 	}
 
+	/**
+	 * Metode som tar input fra brukeri popup vindu i gui sender til
+	 * FilmarkivADT.leggTilFilm()
+	 * 
+	 * Skriver så ut i textarea
+	 * 
+	 * @param tfInput TextFields fra pop up boks
+	 */
 	public void leggTilKlikk(MenyComponent textfields) {
 
 		String tittel = textfields.getTittel().getText();
 		String produsent = textfields.getProdusent().getText();
 		String selskap = textfields.getSelskap().getText();
-
+		// Prøver å opprette film med inputs, kaster exeptions hvor nødvendig
 		try {
 			if (tittel.isEmpty() || produsent.isEmpty() || selskap.isEmpty()) {
 				throw new RuntimeException("Tittel, produsent og selskap må ha tekstinput");
@@ -237,7 +302,7 @@ public class Meny {
 					textfields.getTittel().getText(), Integer.parseInt(textfields.getAar().getText()),
 					Sjanger.finnSjanger(textfields.getSjanger().getText()), textfields.getSelskap().getText());
 
-			// Skjekk alle innputs
+			// Legger til i filmarkiv
 			filma.leggTilFilm(temp);
 
 		} catch (NumberFormatException e) {
@@ -267,32 +332,35 @@ public class Meny {
 
 	}
 
+	/**
+	 * Metode som tar input fra sokTittel popup vindu i gui sender til
+	 * tekstgrensesnitt skrivUtTittel(), som sender videre til respektiv Filmarkiv
+	 * klasse(Tabell eller Linket liste) for søking.
+	 * 
+	 * Skriver så ut i textarea
+	 * 
+	 * @param tfInput TextField fra pop up boks
+	 */
 	public void sokTittel(JTextField tfInput) {
-		Film[] temp = filma.sokTittel(tfInput.getText());
-
-		String str = tekstgr.visFilmer(temp, 0, temp.length);
 
 		mainVinduTA.setText("");
 		mainVinduTA.append(tekstgr.printFilmCategory());
-		mainVinduTA.append(str);
-		// vise resultat av listen
-		// ta tabell fra Filmarkiv.sok og kjøre igjennom tekstgrensesnitt metode kalt
-		// visFilmer
-
+		mainVinduTA.append(tekstgr.skrivUtFilmDelstrengITittel(filma, tfInput.getText()));
 	}
 
+	/**
+	 * Metode som tar input fra sokProdusent popup vindu i gui sender til
+	 * tekstgrensesnitt skrivUtProdl(), som sender videre til respektiv Filmarkiv
+	 * klasse(Tabell eller Linket liste) for søking.
+	 * 
+	 * Skriver så ut i textarea
+	 * 
+	 * @param tfInput TextField fra pop up boks
+	 */
 	public void sokProd(JTextField tfInput) {
-		Film[] temp = filma.sokProdusent(tfInput.getText());
-
-		String str = tekstgr.visFilmer(temp, 0, temp.length);
-
 		mainVinduTA.setText("");
 		mainVinduTA.append(tekstgr.printFilmCategory());
-		mainVinduTA.append(str);
-		// vise resultat av listen
-		// ta tabell fra Filmarkiv.sok og kjøre igjennom tekstgrensesnitt metode kalt
-		// visFilmer
-
+		mainVinduTA.append(tekstgr.skrivUtFilmProdusent(filma, tfInput.getText()));
 	}
 
 	public void refresh() {
@@ -308,13 +376,7 @@ public class Meny {
 		SwingUtilities.updateComponentTreeUI(mainVindu); // oppdaterer mainVindu slik at Arkiv meny vises
 	}
 
-	public void startRefresh() {
-
-		mb.remove(hjelp); // fjerner Hjelp meny, legger til Arkiv meny, legger til Hjelp meny
-
-	}
-
-	public void festLagreMeny() {
+	private void festLagreMeny() {
 		if (!lagtTil) {
 			comp.attachComponents(fil, this, "Lagre", "Lagre", 3);
 			comp.attachComponents(fil, this, "Lagre som", "Lagre som", 4);
@@ -326,15 +388,22 @@ public class Meny {
 	public void info() {
 		mainVinduTA.setText("");
 		mainVinduTA.append(tekstgr.skrivUtStatistikk(filma) + "\n\n\n\n");
-
 		mainVinduTA.append(tekstgr.printFilmCategory());
-
 		mainVinduTA.append(tekstgr.visFilmer(filma.hentFilmTabell(), 0, filma.hentFilmTabell().length));
 
 	}
 
+	// Get metoder brukt i deler av programmet
 	public JTextArea getMainVinduTA() {
 		return mainVinduTA;
+	}
+
+	public boolean isTypeStruktur() {
+		return typeStruktur;
+	}
+
+	public void setTypeStruktur(boolean typeStruktur) {
+		this.typeStruktur = typeStruktur;
 	}
 
 }

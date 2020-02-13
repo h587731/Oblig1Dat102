@@ -4,35 +4,63 @@ import no.hvl.dat102.Film;
 import no.hvl.dat102.Sjanger;
 
 public interface FilmarkivADT {
-	
-	// Bruk gjerne javadoc her i
-	// stedet for vanlige 
-	// kommentarlinjer som her  
-	
-	
-	
-	// Legger til en ny Film
+
+	/**
+	 * Metode som legger til filmobject i arkivet
+	 * 
+	 * @param nyFilm Film objekt som skal settes inn.
+	 * 
+	 */
 	void leggTilFilm(Film nyFilm);
-	
-	// Sletter en Filmhvis den fins 
+
+	/**
+	 * Metode som finner node med match av filmID og fjerner fra listen Søker på
+	 * match med filmNR i filmarkinv
+	 * 
+	 * @param filmNr Int som skal slettes om den finnes
+	 * 
+	 * @return true eller false. om slettet eller ikke.
+	 */
 	boolean slettFilm(int filmNr);
-	
+
 	// Søker og henter Filmermed en gitt delstreng
-	
+
+	/**
+	 * Metode som returnerer film tabell med søkeresultat fra delstreng Søker på
+	 * match med delstreng i filmarkinv
+	 * 
+	 * @param delstreng String som skal søkes på
+	 * @return Tabell av match resultat
+	 */
 	Film[] sokTittel(String delstreng);
-	
-	// Søker og henter produsenter med en gitt delstreng
-	
+
+	/**
+	 * Metode som returnerer filmtabell med søkeresultat fra delstreng. Søker på
+	 * match med delstreng i filmarkinv
+	 * 
+	 * @param delstreng String som skal søkes på
+	 * @return Tabell av match resultat
+	 */
 	Film[] sokProdusent(String delstreng);
-	
-	// Henter antall Filmerfor en gitt sjanger
+
+	/**
+	 * Metode som returnerer antall sjangre i en filmarkiv.
+	 *
+	 * @param sjanger Enum objekt som skal telles for
+	 * @return Int. Antall forekomster
+	 */
 	int antallSjanger(Sjanger sjanger);
 
-	// Returnerer antall Filmer
+	/**
+	 * @return Int antal film objekt i Arkiv
+	 */
 	int antall();
-	
-	// Returnere en tabell av Filmer
-	Film[] hentFilmTabell();
-	
-}
 
+	/**
+	 * Metode som returnerer filmtabell fra filmarkiv.
+	 * 
+	 * @return
+	 */
+	Film[] hentFilmTabell();
+
+}

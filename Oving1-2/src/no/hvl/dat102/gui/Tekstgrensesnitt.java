@@ -7,17 +7,26 @@ import no.hvl.dat102.Sjanger;
 import no.hvl.dat102.adt.FilmarkivADT;
 
 /**
+ * Klasse som jobber med Meny object og FilmarkivADT og sender represasjon av
+ * film arkiv til Meny klassen som en string.
+ * 
+ * 
  * @author Eskil Oscar Ehrensvärd, Per Otto Sande Furre
  *
  */
+
 public class Tekstgrensesnitt {
 	Scanner input = new Scanner(System.in);
 
-	// lese opplysningene om en FILMfra tastatur
+	/**
+	 * Denne metoden er en legacy metode som ikke brukes av gui eller andre klasser.
+	 * Men ble brukt i tidlig del av utvikling når terminal var hovedinterface med
+	 * koden. Grei å ha om man ønsker å legge til filmer uten gui
+	 * 
+	 * @return Returnerer et Film object som en bruker har skrevet inn via consoll
+	 *         vha Scanner object.
+	 */
 	public Film lesFilm() {
-
-		// skrive inn ny film
-		//
 
 		System.out.println("Skriv inn filmens tittel:");
 		String tittel = input.nextLine();
@@ -41,8 +50,12 @@ public class Tekstgrensesnitt {
 
 	}
 
-	// vise en film med alle opplysninger p� skjerm (husk tekst for sjanger)
-
+	/**
+	 * Enkel tekst string metode Skriver ut: Film: År: Filmselskap: Produsent:
+	 * Sjanger: ID:
+	 * 
+	 * @return String med formaterte kategorier.
+	 */
 	public String printFilmCategory() {
 
 		return String.format("%-45s  %-4s   %-35s   %-25s   %-15s   %-4s%n", "Film:", "År:", "Filmselskap:",
@@ -50,6 +63,24 @@ public class Tekstgrensesnitt {
 
 	}
 
+	/**
+	 * Metode som tar inn en tabell med filmobject. Start og slutt posision Kan
+	 * skrive ut fra pos x til y. Robusthet for null objecter. Disse blir ignorert.
+	 * Tar inn et enumobject to ganger som begge blir gjort til string. Første
+	 * enumstring blir gjort til string, strippet for all bokstaver uten om første
+	 * som så blir kapatalisert. Andre enumstring fjernes første bokstav også gjøres
+	 * resten til små bokstaver. disse blir så satt sammen. Feks: DRAMA + DRAMA ->
+	 * D____ + _RAMA -> D + rama -> Drama
+	 * 
+	 * Grunn for start og end posisjon er pga mulighet for gjenbruk av gui og
+	 * utvideles. Blir ikke brukt i programes master branch i githuben.
+	 * 
+	 * @param filmene tabell med film object
+	 * @param start
+	 * @param end
+	 * @return String En stor string med alle filmer retuners og printes ut i
+	 *         tekstvindu av Meny
+	 */
 	public String visFilmer(Film[] filmene, int start, int end) {
 		String str = "";
 
@@ -64,52 +95,59 @@ public class Tekstgrensesnitt {
 			}
 		}
 
-//		for (Film film : filmene) {
-//			if (film == null)
-//				continue;
-//			str = str + String.format("%-45s  %4d   %-35s   %-25s   %-15s   %4d%n", film.getTittel(), film.getAar(),
-//					film.getFilmselskap(), film.getProdusent(),
-//					film.getSjanger().toString().substring(0, 1).toUpperCase()
-//							+ film.getSjanger().toString().toLowerCase().substring(1),
-//					film.getFilmID());
-//
-//		}
-
 		return str;
 
 	}
 
-	// Skrive ut alle Filmermed en spesiell delstreng i tittelen
-	// TODO
-	public void skrivUtFilmDelstrengITittel(FilmarkivADT filma, String delstreng) {
+	/**
+	 * Skrive ut alle Filmermed en spesiell delstreng i tittelen. Får sokeresultat
+	 * fra FilmarkivADT i tabell. bruker så visFilmer() til å returnere string som s
+	 * så returneres til meny for utskrift
+	 * 
+	 * @param filma     FilmarkivADT Filmarkivet vi jobber med
+	 * @param delstreng String som skal søkes på
+	 */
+	public String skrivUtFilmDelstrengITittel(FilmarkivADT filma, String delstreng) {
 		Film[] utTittel = filma.sokTittel(delstreng);
-		visFilmer(utTittel, 0, utTittel.length);
+		return visFilmer(utTittel, 0, utTittel.length);
 	}
 
-// TODO
-	// Skriver ut alle Filmerav en produsent/ en gruppe
-	public void skrivUtFilmProdusent(FilmarkivADT filma, String delstreng) {
+	/**
+	 * Skrive ut alle Filmermed en spesiell delstreng i produsent. Får sokeresultat
+	 * fra FilmarkivADT i tabell. bruker så visFilmer() til å returnere string som s
+	 * så returneres til meny for utskrift
+	 * 
+	 * @param filma     FilmarkivADT Filmarkivet vi jobber med
+	 * @param delstreng String som skal søkes på
+	 */
+	public String skrivUtFilmProdusent(FilmarkivADT filma, String delstreng) {
 		Film[] utProd = filma.sokProdusent(delstreng);
-		visFilmer(utProd, 0, utProd.length);
+		return visFilmer(utProd, 0, utProd.length);
 
 	}
+
 	// notasjon O er=1+ 4n
 
 	//
 	// Skrive ut en enkel statistikk som inneholder antall Filmertotalt
 	// og hvor mange det er i hver sjanger
+	/**
+	 * Bruker metoder for å hente riktig antall filmer. og sjanger. antall() og
+	 * antallSjanger()
+	 * 
+	 * @param filma FilmarkivADT Filmarkivet vi jobber med
+	 * @return String med statstik over filmarkiv objectet
+	 */
 	public String skrivUtStatistikk(FilmarkivADT filma) {
 		String str = "Filmer  : " + filma.antall() + "\n";
 		str = str + "Action  : " + filma.antallSjanger(Sjanger.ACTION) + "\n";
 		str = str + "Drama   : " + filma.antallSjanger(Sjanger.DRAMA) + "\n";
 		str = str + "Historie: " + filma.antallSjanger(Sjanger.HISTORY) + "\n";
 		str = str + "Scfi    : " + filma.antallSjanger(Sjanger.SCFI) + "\n";
+		str = str + "Ingen   : " + filma.antallSjanger(Sjanger.NONE) + "\n";
 
 		return str;
 
 	}
-
-	// ... Ev. andre metoder}
-	// class
 
 }

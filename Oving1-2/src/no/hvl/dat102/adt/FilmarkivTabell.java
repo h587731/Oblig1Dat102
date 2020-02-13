@@ -3,13 +3,13 @@ package no.hvl.dat102.adt;
 import no.hvl.dat102.Film;
 import no.hvl.dat102.Sjanger;
 
-public class Filmarkiv implements FilmarkivADT {
+public class FilmarkivTabell implements FilmarkivADT {
 
 	private Film[] filmtabell;
 	private int tabellAntall;
 	private int filmAntall;
 
-	public Filmarkiv(int antall) {
+	public FilmarkivTabell(int antall) {
 		this.tabellAntall = antall;
 		this.filmtabell = new Film[antall];
 		this.filmAntall = 0;
