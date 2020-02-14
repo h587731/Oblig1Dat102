@@ -287,7 +287,7 @@ public class Meny {
 	 * 
 	 * @param tfInput TextFields fra pop up boks
 	 */
-	public void leggTilKlikk(MenyComponent textfields) {
+	public void leggTilFilm(MenyComponent textfields) {
 
 		String tittel = textfields.getTittel().getText();
 		String produsent = textfields.getProdusent().getText();

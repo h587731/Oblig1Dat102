@@ -215,4 +215,9 @@ public class FilmarkivLinketListe implements FilmarkivADT {
 		return tab;
 	}
 
+	@Override
+	public String toString() {
+		return "Antall filmer:" + antall() + " \nFilmarkive med struktur linket liste.";
+
+	}
 }

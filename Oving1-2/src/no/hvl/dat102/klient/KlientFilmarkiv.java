@@ -1,8 +1,8 @@
 package no.hvl.dat102.klient;
 
-import no.hvl.dat102.adt.FilmarkivTabell;
-import no.hvl.dat102.adt.FilmarkivLinketListe;
 import no.hvl.dat102.adt.FilmarkivADT;
+import no.hvl.dat102.adt.FilmarkivLinketListe;
+import no.hvl.dat102.adt.FilmarkivTabell;
 import no.hvl.dat102.gui.Meny;
 
 /**
@@ -34,6 +34,13 @@ public class KlientFilmarkiv {
 	}
 
 	/**
+	 * Dette er _Eneste_ sted i programmet hvor de to klassene FilmarkivTabell og
+	 * FilmarkivLinketListe blir referert til
+	 * 
+	 * Dette betyr at mulig het for å bytte up med en enda ny struktur krever kun å
+	 * bytte koden her og ikke i noen andre klasser i programmet.
+	 * 
+	 * 
 	 * @param antall Størrelse på filmarkiv
 	 * @return filmarkiv med riktig struktur
 	 * 

@@ -232,8 +232,13 @@ public class FilmarkivTabell implements FilmarkivADT {
 
 	@Override
 	public int antall() {
-		// TODO Auto-generated method stub
 		return filmAntall;
+	}
+
+	@Override
+	public String toString() {
+		return "Antall filmer:" + antall() + " \nFilmarkiv med tabell struktur.";
+
 	}
 
 }

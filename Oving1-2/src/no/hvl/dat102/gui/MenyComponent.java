@@ -16,6 +16,18 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+/**
+ * Hjelpe klasse til meny som automatiserer genereringen og sammensettningen av
+ * gui componenter. som også ordner logikk slik at disse generiske vinduknappene
+ * og menyvalgenes ActionListeners
+ * 
+ * kaller riktig metode.
+ * 
+ *
+ * 
+ * @author Eskil Oscar Ehrensvärd, Per Otto Sande Furre
+ *
+ */
 public class MenyComponent {
 
 	// Generic
@@ -53,6 +65,19 @@ public class MenyComponent {
 		this.textField = null;
 	}
 
+	/**
+	 * Metode som kalles fra actionListeners tilhørende buttons, textfield og meny
+	 * komponenter.
+	 * 
+	 * Festest til disse komponentene i attachComponents.
+	 * 
+	 * 
+	 * @param main          Er hoved objectet, som blir laget i KlientFilmarkiv,
+	 *                      blir sendt via attachComponents som "this"
+	 * @param menyComponent er gui component strukturen som blir laget av denne
+	 *                      klassen.
+	 * @param x             Brukes for at riktig knapp velger riktig metode.
+	 */
 	public static void chooseMethod(Meny main, MenyComponent menyComponent, int x) {
 
 		switch (x) {
@@ -74,7 +99,13 @@ public class MenyComponent {
 
 			break;
 		case 5:
-			main.leggTilKlikk(menyComponent);// Legg til
+			main.leggTilFilm(menyComponent);// Legg til
+			menyComponent.tittel.setText("");
+			menyComponent.produsent.setText("");
+			menyComponent.selskap.setText("");
+			menyComponent.sjanger.setText("");
+			menyComponent.aar.setText("");
+			menyComponent.id.setText("");
 			main.refresh();
 			break;
 		case 6:
@@ -102,6 +133,14 @@ public class MenyComponent {
 	}
 
 	/**
+	 * Metode som lager et JMenyItem som for eksempel "Legg til", lager så popup
+	 * vinde bestående av JFrame, Jpanel, JTextField, JButton og action listeners
+	 * for button, textfield og meny element.
+	 * 
+	 * Satt inn litt logikk for spesial tilfelder ved "Lagre, info, Hjelp" som ikke
+	 * skal ha popup vindu. I tillegg til leggtil film som trenger større vindu med
+	 * flere textfields
+	 * 
 	 * @param menu      menu object fra hoved vindu. Fil, arkiv eller hjelp
 	 * @param main      referanse til hoved objectet, brukes og sendes videre til
 	 *                  chooseMethod()
@@ -182,6 +221,7 @@ public class MenyComponent {
 
 	}
 
+	// skjema setup for Legg til films
 	public void leggTilSkjemaSetup() {
 
 		vindu.setSize(400, 250);

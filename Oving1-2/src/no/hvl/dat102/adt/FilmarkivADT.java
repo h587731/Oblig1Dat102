@@ -3,10 +3,18 @@ package no.hvl.dat102.adt;
 import no.hvl.dat102.Film;
 import no.hvl.dat102.Sjanger;
 
+/**
+ * Interface for arkiv som håndterer objekter av typen Film. Har vanlig legg til
+ * og slett metoder for arkiv struktur. Samt søk og hent tabell metoder.
+ * 
+ * @author Eskil Oscar Ehrensvärd, Per Otto Sande Furre
+ *
+ *
+ */
 public interface FilmarkivADT {
 
 	/**
-	 * Metode som legger til filmobject i arkivet
+	 * Metode som legger til filmobjekt i arkivet
 	 * 
 	 * @param nyFilm Film objekt som skal settes inn.
 	 * 
